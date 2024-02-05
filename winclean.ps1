@@ -43,16 +43,18 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 ###########################
 #### Windex Setup Menu ####
 
-$menuItem_SetVerbosity = "Verbose"
-$menuItem_MetroDebloatMS = "Metro de-bloat, Microsoft (i.e. Mahjong)"
-$menuItem_MetroDebloat3P = "Metro de-bloat, 3rd Party (i.e. LinkedIn)"
-$menuItem_AutoApplyTweaks = "Apply Windex-preferred tweaks"
+$menuItem_SetVerbosity = "Mode: Verbose"
+$menuItem_MetroDebloatMS = "Module: Metro de-bloat, Microsoft (i.e. Mahjong)"
+$menuItem_MetroDebloat3P = "Module: Metro de-bloat, 3rd Party (i.e. LinkedIn) **Slow**"
+$menuItem_AutoApplyTweaks = "Module: Apply Windex-preferred tweaks"
+$menuItem_RemoveEdge = "Tweak: Permanently remove Edge **Experimental**"
 
 $options = @{
     $menuItem_MetroDebloatMS = $true
-    $menuItem_MetroDebloat3P = $true
+    $menuItem_MetroDebloat3P = $false
     $menuItem_SetVerbosity = $false
     $menuItem_AutoApplyTweaks = $true
+    $menuItem_RemoveEdge = $false
 }
 
 function DisplayMenu {
@@ -90,7 +92,6 @@ function DisplayMenu {
 
 
         # Display buttons for Begin and Cancel
-        $buttonOffset = $optionEntries.Count + 2
         for ($j = 0; $j -lt $buttonLabels.Count; $j++) {
             $buttonLabel = $buttonLabels[$j]
             if ($j -eq $selectedIndex - $optionEntries.Count) {
@@ -173,4 +174,8 @@ if ($options[$menuItem_MetroDebloat3P]) {
 
 if ($options[$menuItem_AutoApplyTweaks]) {
     . "$WindexRoot\modules\Autorun Tweaks.ps1"
+}
+
+if ($options[$menuItem_RemoveEdge]) {
+    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll
 }

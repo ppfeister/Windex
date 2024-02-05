@@ -51,17 +51,21 @@ REG LOAD HKU\UserSkel "$env:SystemDrive\Users\Default\NTUSER.DAT"
 Set-ItemProperty -Path "registry::HKU\UserSkel\Control Panel\Desktop\" -Name Wallpaper -Value "$StoredUri\$WallpaperToUse"
 REG UNLOAD HKU\UserSkel
 
-# Changing the wallpaper used by the default aero theme
-takeown /f $env:SystemRoot\Resources\Themes\aero.theme
-icacls --% %SystemRoot%\Resources\Themes\aero.theme /grant "Administrators":m
-if ($Undo){
-    (Get-Content $env:SystemRoot\Resources\Themes\aero.theme).Replace("\Windex\Wallpapers\$WallpaperToUse", '\web\wallpaper\Windows\img0.jpg') `
-    | Set-Content $env:SystemRoot\Resources\Themes\aero.theme
-} else {
-    (Get-Content $env:SystemRoot\Resources\Themes\aero.theme).Replace('\web\wallpaper\Windows\img0.jpg', "\Windex\Wallpapers\$WallpaperToUse") `
-    | Set-Content $env:SystemRoot\Resources\Themes\aero.theme
+function ModifyAeroTheme {
+    # Changing the wallpaper used by the default aero theme
+    takeown /f $env:SystemRoot\Resources\Themes\aero.theme
+    icacls --% %SystemRoot%\Resources\Themes\aero.theme /grant "Administrators":m
+    if ($Undo){
+        (Get-Content $env:SystemRoot\Resources\Themes\aero.theme).Replace("\Windex\Wallpapers\$WallpaperToUse", '\web\wallpaper\Windows\img0.jpg') `
+        | Set-Content $env:SystemRoot\Resources\Themes\aero.theme
+    } else {
+        (Get-Content $env:SystemRoot\Resources\Themes\aero.theme).Replace('\web\wallpaper\Windows\img0.jpg', "\Windex\Wallpapers\$WallpaperToUse") `
+        | Set-Content $env:SystemRoot\Resources\Themes\aero.theme
+    }
+    icacls --% %SystemRoot%\Resources\Themes\aero.theme /setowner "NT SERVICE\TrustedInstaller"
+    icacls --% %SystemRoot%\Resources\Themes\aero.theme /grant:r "Administrators":rx
 }
-icacls --% %SystemRoot%\Resources\Themes\aero.theme /setowner "NT SERVICE\TrustedInstaller"
-icacls --% %SystemRoot%\Resources\Themes\aero.theme /grant:r "Administrators":rx
+
+ModifyAeroTheme | Out-Null
 
 Write-Host "Changes made to the active user will be reflected in the next session."

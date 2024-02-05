@@ -31,10 +31,10 @@ $KnownSIDs = Get-ChildItem registry::HKEY_USERS\ `
 
 foreach ($SID in $KnownSIDs) {
     if ($Undo) {
-        Set-ItemProperty -Path "registry::$SID\Software\Microsoft\Windows\CurrentVersion\Search" -Name SearchBoxTaskbarMode -Value 1 -Type DWord -Force
+        Set-ItemProperty -Path "registry::$SID\Software\Microsoft\Windows\CurrentVersion\Search" -Name SearchBoxTaskbarMode -Value 1 -Type DWord -Force | Out-Null
         continue
     }
-    Set-ItemProperty -Path "registry::$SID\Software\Microsoft\Windows\CurrentVersion\Search" -Name SearchBoxTaskbarMode -Value 0 -Type DWord -Force
+    Set-ItemProperty -Path "registry::$SID\Software\Microsoft\Windows\CurrentVersion\Search" -Name SearchBoxTaskbarMode -Value 0 -Type DWord -Force | Out-Null
 }
 
 # TODO: Make this work with the skel.
