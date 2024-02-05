@@ -1,0 +1,84 @@
+Windows Registry Editor Version 5.00
+
+; do not display lock screen
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization]
+"NoLockScreen"=dword:00000001
+
+; do not display recycle bin icon on desktop
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\NonEnum]
+"{645FF040-5081-101B-9F08-00AA002F954E}"=dword:00000001
+
+; disable toast notifications for applications (does not affect windows toast notifications)
+; NoTileApplicationNotification disables live tiles
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications]
+"NoToastApplicationNotification"=dword:00000001
+"NoToastApplicationNotificationOnLockScreen"=dword:00000001
+"NoTileApplicationNotification"=dword:00000001
+
+; disable recent document history in explorer
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoRecentDocsHistory"=dword:00000001
+
+; Minimize ll Programs in Start menu
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoStartMenuMorePrograms"=dword:00000003
+
+; Hides recent installs from Start Menu "All Apps"
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
+"HideRecentlyAddedApps"=dword:00000001
+
+; Disable Windows Spotlight on Lockscreen (random images and such)
+; Disable third party search suggestions in spotlight search/start menu search
+; Disable some telem
+; Disable all spotlight stuff at onces
+; Disable annoying windows update walkthroughs for apps (like edge)
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent]
+"ConfigureWindowsSpotlight"=dword:00000002
+"DisableThirdPartySuggestions"=dword:00000001
+"DisableTailoredExperiencesWithDiagnosticData"=dword:00000001
+"DisableWindowsSpotlightFeatures"=dword:00000001
+"DisableWindowsSpotlightWindowsWelcomeExperience"=dword:00000001
+"DisableWindowsSpotlightOnActionCenter"=dword:00000001
+"DisableWindowsSpotlightOnSettings"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection]
+"DoNotShowFeedbackNotifications"=dword:00000001
+
+; MAKE OPTIONAL -- DO NOT DO BY DEFAULT
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM]
+"DisallowAnimations"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FindMyDevice]
+"AllowFindMyDevice"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\LocationAndSensors]
+"DisableLocation"=dword:00000001
+"DisableLocationScripting"=dword:00000001
+"DisableSensors"=dword:00000001
+
+; Do not allow apps to ask for local microsoft login
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\MicrosoftAccount]
+"DisableUserAuth"=dword:00000001
+
+; onedrive bad
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive]
+"PreventNetworkTrafficPreUserSignIn"=dword:00000001
+"DisableFileSyncNGSC"=dword:00000001
+
+; AllowCloudSearch allows the indexer and Cortana to include things like OneDrive and Sharepoint
+; EnableDynamicContentInWSB removes crap from search
+; ConnectedSearchUseWeb do not show internet results in start menu search
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search]
+"AllowCloudSearch"=dword:00000000
+"AllowCortana"=dword:00000000
+"EnableDynamicContentInWSB"=dword:00000000
+"ConnectedSearchUseWeb"=dword:00000000
+"DisableWebSearch"=dword:00000001
+"ConnectedSearchPrivacy"=dword:00000003
+
+; Disable auto game mode
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\GameBar]
+"AllowAutoGameMode"=dword:00000000
+"AutoGameModeEnabled"=dword:00000000
