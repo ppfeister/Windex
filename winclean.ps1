@@ -1,0 +1,176 @@
+# Windex
+# github.com/ppfeister/windex
+#
+# MAINTAINER : Paul Pfeister (github.com/ppfeister)
+# 
+# PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
+#              mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
+#
+# WARRANTY   : No warranty provided whatsoever. Use at your own risk.
+
+<#
+.SYNOPSIS
+Debloats Windows 10 and Windows 11.
+.LINK
+Official repository: https://github.com/ppfeister/Windex
+.LINK
+Latest release: https://github.com/ppfeister/Windex/releases/latest
+#>
+
+#Requires -RunAsAdministrator
+
+New-Variable -Scope Script -Name WindexRoot -Option Constant -Value "$(Split-Path -Parent $MyInvocation.MyCommand.Path)"
+New-Variable -Scope Script -Name sysenv -Option Constant -Value "$([System.Environment]::OSVersion.Platform)"
+New-Variable -Scope Script -Name distrib -Option Constant -Value "$((Get-WmiObject Win32_OperatingSystem).Caption)" -ErrorAction Ignore
+New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
+	
+  <><><><><><><><><><><><><><><><><><><><><><><><>
+<><>                                            <><>
+<>                   WinCleaner                   <>
+<>     Windows bloat and telemetry mitigation     <>
+<>                                                <>
+<>    https://github.com/paulpfeister/sysbuild    <>
+<><>                                            <><>
+  <><><><><><><><><><><><><><><><><><><><><><><><>
+
+
+
+"@
+
+    #######################
+  ###########################
+###############################
+###############################
+#### WinCleaner Setup Menu ####
+
+$menuItem_SetVerbosity = "Verbose"
+$menuItem_MetroDebloatMS = "Metro de-bloat, Microsoft (i.e. Mahjong)"
+$menuItem_MetroDebloat3P = "Metro de-bloat, 3rd Party (i.e. LinkedIn)"
+$menuItem_AutoApplyTweaks = "Apply Windex-preferred tweaks"
+
+$options = @{
+    $menuItem_MetroDebloatMS = $true
+    $menuItem_MetroDebloat3P = $true
+    $menuItem_SetVerbosity = $false
+    $menuItem_AutoApplyTweaks = $true
+}
+
+function DisplayMenu {
+    $selectedIndex = 0
+    $optionEntries = $options.GetEnumerator() | Sort-Object Name
+    $buttonLabels = @("Begin", "Cancel")
+    
+    # Move cursor to the top of the console window
+    $Host.UI.RawUI.CursorPosition = New-Object System.Management.Automation.Host.Coordinates(0, 0)
+    
+    while ($true) {
+        # Clear console window (if not in debug mode)
+        if($DebugPreference -eq "SilentlyContinue") {
+            Clear-Host
+        }
+
+	[console]::CursorVisible = $false
+
+	Write-Host "$scriptBanner"
+	
+	$menuOptionLeftPadding = "    "
+        
+	# Display menu
+	for ($i = 0; $i -lt $optionEntries.Count; $i++) {
+            $option = $optionEntries[$i].Key
+            $isSelected = $options[$option] # Get the current state directly from the $options hashtable
+            if ($i -eq $selectedIndex) {
+                Write-Host -ForegroundColor Yellow ("$menuOptionLeftPadding[$(if ($isSelected) {'*'} else {' '})] $($option)")
+            } else {
+                Write-Host ("$menuOptionLeftPadding[$(if ($isSelected) {'*'} else {' '})] $($option)")
+            }
+        }
+
+	Write-Host ""
+
+
+        # Display buttons for Begin and Cancel
+        $buttonOffset = $optionEntries.Count + 2
+        for ($j = 0; $j -lt $buttonLabels.Count; $j++) {
+            $buttonLabel = $buttonLabels[$j]
+            if ($j -eq $selectedIndex - $optionEntries.Count) {
+                Write-Host -ForegroundColor Yellow ("$menuOptionLeftPadding[$($buttonLabel)]")
+            } else {
+                Write-Host "$menuOptionLeftPadding[$($buttonLabel)]"
+            }
+        }
+
+	Write-Host ""
+        
+        $key = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown").VirtualKeyCode
+        switch ($key) {
+            38 { # Up arrow
+                if ($selectedIndex -gt 0) {
+                    $selectedIndex--
+                }
+            }
+            40 { # Down arrow
+                if ($selectedIndex -lt ($optionEntries.Count + $buttonLabels.Count - 1)) {
+                    $selectedIndex++
+                }
+            }
+            32 { # Spacebar
+                if ($selectedIndex -eq $optionEntries.Count) {
+                    return "Begin"
+                } elseif ($selectedIndex -eq ($optionEntries.Count + 1)) {
+                    return "Cancel"
+                } else {
+                    $options[$optionEntries[$selectedIndex].Key] = !$options[$optionEntries[$selectedIndex].Key]
+                }
+            }
+            13 { # Enter
+                if ($selectedIndex -eq $optionEntries.Count) {
+                    return "Begin"
+                } elseif ($selectedIndex -eq ($optionEntries.Count + 1)) {
+                    return "Cancel"
+                } else {
+                    $options[$optionEntries[$selectedIndex].Key] = !$options[$optionEntries[$selectedIndex].Key]
+                }
+            }
+        }
+    }
+}
+
+#### WinCleaner Setup Menu ####
+###############################
+###############################
+  ###########################
+    #######################
+
+if ($sysenv -ne "Win32NT") {
+    Write-Host $scriptBanner
+    prinErr("This script is intended to run on Windows only. Exiting.")
+}
+
+$result = DisplayMenu
+
+if ($result -eq "Cancel") {
+    Write-Host "No action taken.`n"
+    return
+}
+
+if ($result -ne "Begin") {
+    return "Somehow, an invalid result was returned from the menu. Exiting."
+}
+
+if ($options[$menuItem_SetVerbosity]) {
+    $VerbosePreference = "Continue"
+    Write-Verbose "Higher verbosity enabled."
+}
+
+if ($options[$menuItem_MetroDebloatMS]) {
+    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft"
+}
+
+if ($options[$menuItem_MetroDebloat3P]) {
+    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty"
+}
+
+if ($options[$menuItem_AutoApplyTweaks]) {
+    . "$WindexRoot\modules\Autorun Tweaks.ps1"
+}

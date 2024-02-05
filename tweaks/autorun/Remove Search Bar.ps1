@@ -1,8 +1,22 @@
+# Windex
+# github.com/ppfeister/windex
+#
+# MAINTAINER : Paul Pfeister (github.com/ppfeister)
+# 
+# PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
+#              mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
+#
+# WARRANTY   : No warranty provided whatsoever. Use at your own risk.
+
 <#
 .SYNOPSIS
 Removes the search bar for all users on the system.
 .PARAMETER Undo
 Revert changes made by this script. Any users with the search bar removed will have it restored.
+.LINK
+Official repository: https://github.com/ppfeister/Windex
+.LINK
+Latest release: https://github.com/ppfeister/Windex/releases/latest
 #>
 
 param (

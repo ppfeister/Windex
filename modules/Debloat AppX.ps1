@@ -1,7 +1,7 @@
 # Windex
-# github.com/paulpfeister/sysbuild
+# github.com/ppfeister/windex
 #
-# MAINTAINER : Paul Pfeister (github.com/paulpfeister)
+# MAINTAINER : Paul Pfeister (github.com/ppfeister)
 # 
 # PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
 #              mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
@@ -69,7 +69,7 @@ $PurgePackage = {
         | Where-Object Name -eq $PackageName `
         | Select-Object -ExpandProperty PackageFullName
     } catch {
-        throw "Failed to query installed AppX packages for $PackageName."
+        throw "Failed to query installed AppX packages for $PackageName. Try a lower parallelization value?"
     }
 
     if ($installed) {
@@ -90,7 +90,7 @@ $PurgePackage = {
         | Where-Object DisplayName -eq $PackageName `
         | Select-Object -ExpandProperty PackageName
     } catch {
-        throw "Failed to query provisioned AppX packages for $PackageName."
+        throw "Failed to query provisioned AppX packages for $PackageName. Try a lower parallelization value?"
     }
 
     if ($provisioned) {
