@@ -26,10 +26,10 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 	
   <><><><><><><><><><><><><><><><><><><><><><><><>
 <><>                                            <><>
-<>                   WinCleaner                   <>
+<>                     Windex                     <>
 <>     Windows bloat and telemetry mitigation     <>
 <>                                                <>
-<>    https://github.com/paulpfeister/sysbuild    <>
+<>     https://github.com/ppfeister/windex        <>
 <><>                                            <><>
   <><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -37,11 +37,11 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 
 "@
 
-    #######################
-  ###########################
-###############################
-###############################
-#### WinCleaner Setup Menu ####
+    ###################
+  #######################
+###########################
+###########################
+#### Windex Setup Menu ####
 
 $menuItem_SetVerbosity = "Verbose"
 $menuItem_MetroDebloatMS = "Metro de-bloat, Microsoft (i.e. Mahjong)"
@@ -136,11 +136,11 @@ function DisplayMenu {
     }
 }
 
-#### WinCleaner Setup Menu ####
-###############################
-###############################
-  ###########################
-    #######################
+#### Windex Setup Menu ####
+###########################
+###########################
+  #######################
+    ###################
 
 if ($sysenv -ne "Win32NT") {
     Write-Host $scriptBanner
