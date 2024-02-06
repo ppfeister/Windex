@@ -29,6 +29,7 @@ Get-ChildItem -Path "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\tweak
     Switch ($extension) {
         ".ps1" { . "$tweakUri" -Undo:$script:UndoAll }
         ".reg" { runRegistryTweak -tweakUri $tweakUri }
+        ".cmd" { cmd /c `"$tweakUri`" /u $script:UndoAll }
         Default { Write-Host "Autorun file $_ is of an unkown type" }
     }
 }

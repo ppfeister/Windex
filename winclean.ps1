@@ -26,10 +26,10 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 	
   <><><><><><><><><><><><><><><><><><><><><><><><>
 <><>                                            <><>
-<>                   WinCleaner                   <>
+<>                     Windex                     <>
 <>     Windows bloat and telemetry mitigation     <>
 <>                                                <>
-<>    https://github.com/paulpfeister/sysbuild    <>
+<>     https://github.com/ppfeister/windex        <>
 <><>                                            <><>
   <><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -37,22 +37,26 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 
 "@
 
-    #######################
-  ###########################
-###############################
-###############################
-#### WinCleaner Setup Menu ####
+    ###################
+  #######################
+###########################
+###########################
+#### Windex Setup Menu ####
 
-$menuItem_SetVerbosity = "Verbose"
-$menuItem_MetroDebloatMS = "Metro de-bloat, Microsoft (i.e. Mahjong)"
-$menuItem_MetroDebloat3P = "Metro de-bloat, 3rd Party (i.e. LinkedIn)"
-$menuItem_AutoApplyTweaks = "Apply Windex-preferred tweaks"
+$menuItem_SetVerbosity = "Mode: Verbose"
+$menuItem_MetroDebloatMS = "Module: Metro de-bloat, Microsoft (i.e. Mahjong)"
+$menuItem_MetroDebloat3P = "Module: Metro de-bloat, 3rd Party (i.e. LinkedIn) **Slow**"
+$menuItem_AutoApplyTweaks = "Module: Apply Windex-preferred tweaks"
+$menuItem_WingetDebloat = "Module: Debloat App Installer (requires winget)"
+$menuItem_RemoveEdge = "System Tweak: Permanently remove Edge **Experimental**"
 
 $options = @{
     $menuItem_MetroDebloatMS = $true
-    $menuItem_MetroDebloat3P = $true
+    $menuItem_MetroDebloat3P = $false
     $menuItem_SetVerbosity = $false
     $menuItem_AutoApplyTweaks = $true
+    $menuItem_RemoveEdge = $false
+    $menuItem_WingetDebloat = $true
 }
 
 function DisplayMenu {
@@ -90,7 +94,6 @@ function DisplayMenu {
 
 
         # Display buttons for Begin and Cancel
-        $buttonOffset = $optionEntries.Count + 2
         for ($j = 0; $j -lt $buttonLabels.Count; $j++) {
             $buttonLabel = $buttonLabels[$j]
             if ($j -eq $selectedIndex - $optionEntries.Count) {
@@ -136,11 +139,11 @@ function DisplayMenu {
     }
 }
 
-#### WinCleaner Setup Menu ####
-###############################
-###############################
-  ###########################
-    #######################
+#### Windex Setup Menu ####
+###########################
+###########################
+  #######################
+    ###################
 
 if ($sysenv -ne "Win32NT") {
     Write-Host $scriptBanner
@@ -173,4 +176,19 @@ if ($options[$menuItem_MetroDebloat3P]) {
 
 if ($options[$menuItem_AutoApplyTweaks]) {
     . "$WindexRoot\modules\Autorun Tweaks.ps1"
+}
+
+if ($options[$menuItem_RemoveEdge]) {
+    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit
+}
+
+if ($options[$menuItem_WingetDebloat]) {
+    . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name"
+}
+
+$confirmation = Read-Host "Many changes won't be realized until the next session. Are you ready to log out? (Type 'yes' to confirm)"
+if ($confirmation -eq "yes") {
+    shutdown.exe /l /f
+} else {
+    Write-Host "Log out cancelled."
 }

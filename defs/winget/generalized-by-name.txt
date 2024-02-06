@@ -1,0 +1,31 @@
+:: Winget Package Manifest
+::
+:: Winget package names marked for removal should be included here.
+:: Winget package IDs marked for removal should be included in remove-by-id.txt.
+:: Wildcards * can be used, but their use is cautioned.
+Cortana
+Microsoft Advertising SDK for XAML
+MSN Weather
+Paint 3D
+3D Viewer
+Microsoft Sticky Notes
+Mixed Reality Portal
+Movies & TV
+:::: OneNote seems to have problems. May require manual removal.
+::OneNote
+Microsoft Engagement Framework
+Store Experience Host
+Microsoft Pay
+Windows Maps
+Windows Voice Recorder
+:::: Xbox seems to have problems. May require manual removal.
+::Xbox
+Xbox TCUI
+Xbox Game Bar Plugin
+:::: Xbox Game Bar seems to have problems. May require manual removal.
+::Xbox Game Bar
+Xbox Identity Provider
+Xbox Game Speech Window
+Your Phone
+Groove Music
+Mail and Calendar
