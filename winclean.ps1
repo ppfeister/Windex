@@ -47,7 +47,8 @@ $menuItem_SetVerbosity = "Mode: Verbose"
 $menuItem_MetroDebloatMS = "Module: Metro de-bloat, Microsoft (i.e. Mahjong)"
 $menuItem_MetroDebloat3P = "Module: Metro de-bloat, 3rd Party (i.e. LinkedIn) **Slow**"
 $menuItem_AutoApplyTweaks = "Module: Apply Windex-preferred tweaks"
-$menuItem_RemoveEdge = "Tweak: Permanently remove Edge **Experimental**"
+$menuItem_WingetDebloat = "Module: Debloat App Installer (requires winget)"
+$menuItem_RemoveEdge = "System Tweak: Permanently remove Edge **Experimental**"
 
 $options = @{
     $menuItem_MetroDebloatMS = $true
@@ -55,6 +56,7 @@ $options = @{
     $menuItem_SetVerbosity = $false
     $menuItem_AutoApplyTweaks = $true
     $menuItem_RemoveEdge = $false
+    $menuItem_WingetDebloat = $true
 }
 
 function DisplayMenu {
@@ -177,5 +179,16 @@ if ($options[$menuItem_AutoApplyTweaks]) {
 }
 
 if ($options[$menuItem_RemoveEdge]) {
-    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll
+    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit
+}
+
+if ($options[$menuItem_WingetDebloat]) {
+    . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name"
+}
+
+$confirmation = Read-Host "Many changes won't be realized until the next session. Are you ready to log out? (Type 'yes' to confirm)"
+if ($confirmation -eq "yes") {
+    shutdown.exe /l /f
+} else {
+    Write-Host "Log out cancelled."
 }
