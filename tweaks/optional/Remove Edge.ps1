@@ -34,7 +34,7 @@ param (
 )
 
 $version = '1.7'
-$host.UI.RawUI.WindowTitle = "EdgeRemover $version | made by @he3als"
+#$host.UI.RawUI.WindowTitle = "EdgeRemover $version | made by @he3als"
 
 # credit to ave9858 for Edge removal method: https://gist.github.com/ave9858/c3451d9f452389ac7607c99d45edecc6
 $ProgressPreference = "SilentlyContinue"
