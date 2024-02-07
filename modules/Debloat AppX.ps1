@@ -26,7 +26,7 @@ Latest release: https://github.com/ppfeister/Windex/releases/latest
 param (
     [Parameter(Position = 0, Mandatory = $true)] [string] $ManifestCategory,
     [Parameter(Position = 1, Mandatory = $false)] [string] $ManifestDirectory = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\defs",
-    [Parameter(Position = 2, Mandatory = $false)] [int] $MaxParallel = 4
+    [Parameter(Position = 2, Mandatory = $false)] [int] $MaxParallel = 3
 )
 
 function filterManifest {
