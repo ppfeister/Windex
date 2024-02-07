@@ -192,3 +192,5 @@ if ($confirmation -eq "yes") {
 } else {
     Write-Host "Log out cancelled."
 }
+
+Get-Process Explorer | Stop-Process
