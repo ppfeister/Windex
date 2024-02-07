@@ -32,7 +32,15 @@ $WallpaperToUse = "Wallpaper_01.jpg"
 
 
 New-Item -ItemType Directory -Path (Split-Path -Path $StoredUri -Parent) -Force -ErrorAction Stop | Out-Null
-Copy-Item -Path $SourceUri -Destination $StoredUri -Recurse -ErrorAction Stop | Out-Null
+try {
+    Copy-Item -Path $SourceUri -Destination $StoredUri -Recurse -ErrorAction Stop | Out-Null
+} catch {
+    if($_.Exception.Message -like "*already exists*") {
+        Write-Verbose "Wallpaper directory already exists, skipping"
+    } else {
+        throw $_
+    }
+}
 
 $KnownSIDs = Get-ChildItem registry::HKEY_USERS\ `
 | Select-Object -ExpandProperty Name `

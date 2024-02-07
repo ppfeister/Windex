@@ -23,7 +23,10 @@ param (
     [Parameter(Position = 0, Mandatory = $false)] [switch] $Undo = $false
 )
 
-$WindexRootUri = $(Split-Path -Parent $MyInvocation.MyCommand -Parent)
+New-Variable -Scope Script -Name WindexRootUri -Option Constant -Value "$(Split-Path -Parent $MyInvocation.MyCommand.Path)\..\.."
+#$WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\.."
+
+Write-Host "eeee $WindexRootUri"
 
 if ($Undo) {
     Write-Host "This tweak does not yet support undo, but it will skip"
@@ -38,16 +41,16 @@ Write-Verbose "Users found for Start Layout override: $($userProfiles.Name -join
 
 ##### Apply Template
 
-$sourceUri = "$WindexRootUri\defs\markup\Start Menu Layout Override.xml"
+$layoutSourceUri = "$WindexRootUri\defs\markup\Start Menu Layout Override.xml"
 
 # Applies templace to default
-Import-StartLayout -LayoutPath "$sourceUri" -MountPath "$env:SystemDrive"
+Import-StartLayout -LayoutPath "$layoutSourceUri" -MountPath "$env:SystemDrive"
 
 # Applies template to each existing user
 foreach ($profile in $userProfiles) {
     $ntuserPath = $profile.FullName
     Write-Verbose "Applying Start Layout override to $($profile.Name)"
-    Copy-Item -Path "$sourceUri" -Destination "$ntuserPath\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml" -Force
+    Copy-Item -Path "$layoutSourceUri" -Destination "$ntuserPath\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml" -Force
 }
 
 
