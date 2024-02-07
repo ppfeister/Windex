@@ -24,14 +24,14 @@ New-Variable -Scope Script -Name sysenv -Option Constant -Value "$([System.Envir
 New-Variable -Scope Script -Name distrib -Option Constant -Value "$((Get-WmiObject Win32_OperatingSystem).Caption)" -ErrorAction Ignore
 New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 	
-  <><><><><><><><><><><><><><><><><><><><><><><><>
-<><>                                            <><>
-<>                     Windex                     <>
-<>     Windows bloat and telemetry mitigation     <>
-<>                                                <>
-<>     https://github.com/ppfeister/windex        <>
-<><>                                            <><>
-  <><><><><><><><><><><><><><><><><><><><><><><><>
+      <><><><><><><><><><><><><><><><><><><><><><><><>
+    <><>                                            <><>
+    <>                     Windex                     <>
+    <>     Windows bloat and telemetry mitigation     <>
+    <>                                                <>
+    <>     https://github.com/ppfeister/windex        <>
+    <><>                                            <><>
+      <><><><><><><><><><><><><><><><><><><><><><><><>
 
 
 
@@ -179,7 +179,7 @@ if ($options[$menuItem_AutoApplyTweaks]) {
 }
 
 if ($options[$menuItem_RemoveEdge]) {
-    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit
+    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
 }
 
 if ($options[$menuItem_WingetDebloat]) {
