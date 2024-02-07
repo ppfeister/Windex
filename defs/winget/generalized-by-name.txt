@@ -11,8 +11,7 @@ Paint 3D
 Microsoft Sticky Notes
 Mixed Reality Portal
 Movies & TV
-:::: OneNote seems to have problems. May require manual removal.
-::OneNote
+OneNote for Windows 10
 Microsoft Engagement Framework
 Store Experience Host
 Microsoft Pay
@@ -20,12 +19,16 @@ Windows Maps
 Windows Voice Recorder
 :::: Xbox seems to have problems. May require manual removal.
 ::Xbox
+Xbox Console Companion
 Xbox TCUI
 Xbox Game Bar Plugin
 :::: Xbox Game Bar seems to have problems. May require manual removal.
 ::Xbox Game Bar
+Game Bar
 Xbox Identity Provider
 Xbox Game Speech Window
 Your Phone
 Groove Music
 Mail and Calendar
+Phone Link
+Windows Camera
