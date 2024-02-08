@@ -23,10 +23,7 @@ param (
     [Parameter(Position = 0, Mandatory = $false)] [switch] $Undo = $false
 )
 
-New-Variable -Scope Script -Name WindexRootUri -Option Constant -Value "$(Split-Path -Parent $MyInvocation.MyCommand.Path)\..\.."
-#$WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\.."
-
-Write-Host "eeee $WindexRootUri"
+$WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\.."
 
 if ($Undo) {
     Write-Host "This tweak does not yet support undo, but it will skip"
@@ -35,21 +32,22 @@ if ($Undo) {
 
 $userProfiles = Get-ChildItem "$env:SystemDrive\Users" `
 | Where-Object { $_.PSIsContainer } `
-| Where-Object { $_.Name -ne "Public" }
+| Where-Object { $_.Name -ne "Public" } `
+| Where-Object { $_.Name -ne "Default" }
 
-Write-Verbose "Users found for Start Layout override: $($userProfiles.Name -join ', ')"
+Write-Verbose "Users found for Start Menu override: $($userProfiles.Name -join ', ')."
 
 ##### Apply Template
 
 $layoutSourceUri = "$WindexRootUri\defs\markup\Start Menu Layout Override.xml"
 
 # Applies templace to default
-Import-StartLayout -LayoutPath "$layoutSourceUri" -MountPath "$env:SystemDrive"
+Import-StartLayout -LayoutPath "$layoutSourceUri" -MountPath "$env:SystemDrive\"
 
 # Applies template to each existing user
 foreach ($profile in $userProfiles) {
     $ntuserPath = $profile.FullName
-    Write-Verbose "Applying Start Layout override to $($profile.Name)"
+    Write-Verbose "Copying Start Menu override to $($profile.Name)'s profile."
     Copy-Item -Path "$layoutSourceUri" -Destination "$ntuserPath\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml" -Force
 }
 
@@ -61,20 +59,19 @@ $regKey = 'Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\Defa
 foreach ($profile in $userProfiles) {
     $ntuserPath = Join-Path $profile.FullName "NTUSER.DAT"
 
-    $regLoadOut = REG LOAD "HKU\IdleUser" $ntuserPath
+    $regLoadOut = Invoke-Expression 'REG LOAD "HKU\IdleUser" "$ntuserPath" 2>&1'
 
     if ($regLoadOut -match "ERROR: The process cannot access the file because it is being used by another process.") {
-        Write-Host "Skipping $($profile.Name) because it is already in use. If the user is currently logged in, that user will be updated in the next round (via SID)."
         continue
     }
 
     if (Test-Path "HKU\IdleUser\$regKey") {
         Remove-Item "registry::HKU\IdleUser\$regKey"  -Force -Recurse
-        Write-Host "Registry key deleted for $($profile.Name)"
+        Write-Verbose "Registry key deleted to reset $($profile.Name)'s Start Menu cache."
     } else {
-        Write-Host "Registry key not found for $($profile.Name)"
+        Write-Verbose "Registry key not found for $($profile.Name). Their cache may not exist. Skipping."
     }
-    reg unload "HKU\IdleUser"
+    Invoke-Expression 'reg unload "HKU\IdleUser" 2>&1' | Out-Null
 }
 
 $KnownSIDs = Get-ChildItem registry::HKEY_USERS\ `
