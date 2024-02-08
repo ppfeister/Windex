@@ -25,6 +25,8 @@ param (
 
 #Requires -RunAsAdministrator
 
+#TODO Adapt for users that are not currently logged in, such as the method used in the Declutter Start Menu tweak
+
 $KnownSIDs = Get-ChildItem registry::HKEY_USERS\ `
 | Select-Object -ExpandProperty Name `
 | Select-String -Pattern '^HKEY_USERS\\S-1-5-21-[\d-]+?$'
@@ -40,5 +42,3 @@ foreach ($SID in $KnownSIDs) {
 REG LOAD HKU\UserSkel "$env:SystemDrive\Users\Default\NTUSER.DAT"
 Set-ItemProperty -Path "registry::HKU\UserSkel\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name ShowTaskViewButton -Value 0 -Type DWord -Force
 REG UNLOAD HKU\UserSkel
-
-Write-Host "Changes made to the active user will be reflected in the next session."

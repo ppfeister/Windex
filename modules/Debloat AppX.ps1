@@ -26,7 +26,7 @@ Latest release: https://github.com/ppfeister/Windex/releases/latest
 param (
     [Parameter(Position = 0, Mandatory = $true)] [string] $ManifestCategory,
     [Parameter(Position = 1, Mandatory = $false)] [string] $ManifestDirectory = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\defs",
-    [Parameter(Position = 2, Mandatory = $false)] [int] $MaxParallel = 4
+    [Parameter(Position = 2, Mandatory = $false)] [int] $MaxParallel = 3
 )
 
 function filterManifest {
@@ -60,16 +60,29 @@ $itemNames = loadManifest -ManifestUri "$ManifestDirectory\$ManifestCategory.txt
 
 $PurgePackage = {
     param (
-        [Parameter(Position = 0, Mandatory = $true)] [string] $PackageName
+        [Parameter(Position = 0, Mandatory = $true)] [string] $PackageName,
+        [Parameter(Position = 1, Mandatory = $false)] [int] $attempt = 0
     )
-    
+
+    $maxAttempts = 4
+    $appxOpCollisionErr ="Another operation on app packages (.appx) is in progress.`nWait for the current operation to complete and then retry the command. For more information, see the help."
+
     # REMOVING PACKAGES
     try {
         $installed = Get-AppxPackage -AllUsers -ErrorAction Stop | Select-Object PackageFullName,Name `
         | Where-Object Name -eq $PackageName `
         | Select-Object -ExpandProperty PackageFullName
     } catch {
-        throw "Failed to query installed AppX packages for $PackageName. Try a lower parallelization value?"
+        if ($_.Exception.Message -like $appxOpCollisionErr) {
+            if ($attempt -lt $maxAttempts) {
+                Start-Sleep -Seconds 5
+                return & $PurgePackage -PackageName $PackageName -attempt ($attempt + 1)
+            } else {
+                Write-Error "Failed to query installed AppX packages for $PackageName after $maxAttempts attempts."
+            }
+        } else {
+            throw $_.Exception
+        }
     }
 
     if ($installed) {
@@ -77,7 +90,16 @@ $PurgePackage = {
             Remove-AppxPackage -Verbose:$false -Package $installed -ErrorAction Stop
             Write-Verbose "Removed AppX package $PackageName."
         } catch {
-            Write-Error("Failed to remove AppX package $PackageName.")
+            if ($_.Exception.Message -like $appxOpCollisionErr) {
+                if ($attempt -lt $maxAttempts) {
+                    Start-Sleep -Seconds 5
+                    return & $PurgePackage -PackageName $PackageName -attempt ($attempt + 1)
+                } else {
+                    Write-Error "Failed to query provisioned AppX packages for $PackageName after $maxAttempts attempts."
+                }
+            } else {
+                Write-Error "Failed to deprovision AppX package $PackageName.`n$_.Exception.Message"
+            }
         }
         Clear-Variable installed
     }
@@ -90,7 +112,16 @@ $PurgePackage = {
         | Where-Object DisplayName -eq $PackageName `
         | Select-Object -ExpandProperty PackageName
     } catch {
-        throw "Failed to query provisioned AppX packages for $PackageName. Try a lower parallelization value?"
+        if ($_.Exception.Message -like $appxOpCollisionErr) {
+            if ($attempt -lt $maxAttempts) {
+                Start-Sleep -Seconds 5
+                return & $PurgePackage -PackageName $PackageName -attempt ($attempt + 1)
+            } else {
+                Write-Error "Failed to query provisioned AppX packages for $PackageName after $maxAttempts attempts."
+            }
+        } else {
+            throw $_.Exception
+        }
     }
 
     if ($provisioned) {
@@ -98,7 +129,16 @@ $PurgePackage = {
             Remove-AppxProvisionedPackage -Online -Verbose:$false -PackageName $provisioned -ErrorAction Stop | Out-Null
             Write-Verbose "Deprovisioned AppX package $PackageName."
         } catch {
-            Write-Error("Failed to deprovision AppX package $PackageName.")
+            if ($_.Exception.Message -like $appxOpCollisionErr) {
+                if ($attempt -lt $maxAttempts) {
+                    Start-Sleep -Seconds 5
+                    return & $PurgePackage -PackageName $PackageName -attempt ($attempt + 1)
+                } else {
+                    Write-Error "Failed to query provisioned AppX packages for $PackageName after $maxAttempts attempts."
+                }
+            } else {
+                Write-Error "Failed to deprovision AppX package $PackageName.`n$_.Exception.Message"
+            }
         }
         Clear-Variable provisioned
     }

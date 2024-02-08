@@ -21,10 +21,6 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
 "NoRecentDocsHistory"=dword:00000001
 
-; Minimize ll Programs in Start menu
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
-"NoStartMenuMorePrograms"=dword:00000003
-
 ; Hides recent installs from Start Menu "All Apps"
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
 "HideRecentlyAddedApps"=dword:00000001

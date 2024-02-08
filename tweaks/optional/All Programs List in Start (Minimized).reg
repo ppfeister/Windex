@@ -1,0 +1,3 @@
+; Minimize All Programs tab in Start menu
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoStartMenuMorePrograms"=dword:00000000
