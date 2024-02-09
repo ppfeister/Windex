@@ -174,10 +174,6 @@ if ($options[$menuItem_MetroDebloat3P]) {
     . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty"
 }
 
-if ($options[$menuItem_AutoApplyTweaks]) {
-    . "$WindexRoot\modules\Autorun Tweaks.ps1"
-}
-
 if ($options[$menuItem_RemoveEdge]) {
     . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
 }
@@ -186,11 +182,8 @@ if ($options[$menuItem_WingetDebloat]) {
     . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name"
 }
 
-$confirmation = Read-Host "Many changes won't be realized until the next session. Are you ready to log out? (Type 'yes' to confirm)"
-if ($confirmation -eq "yes") {
-    shutdown.exe /l /f
-} else {
-    Write-Host "Log out cancelled."
+if ($options[$menuItem_AutoApplyTweaks]) {
+    . "$WindexRoot\modules\Autorun Tweaks.ps1"
 }
 
 Get-Process Explorer | Stop-Process

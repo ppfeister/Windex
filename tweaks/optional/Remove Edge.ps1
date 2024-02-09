@@ -272,22 +272,22 @@ function RemoveWebView {
 
 function UninstallAll {
 	if ($removeEdge) {
-		Write-Warning "Uninstalling Edge Chromium..."
+		Write-Verbose "Uninstalling Edge Chromium..."
 		RemoveEdgeChromium
 		if (!($KeepAppX)) {
-			Write-Warning "Uninstalling AppX Edge..."
+			Write-Verbose "Uninstalling AppX Edge..."
 			RemoveEdgeAppx
-		} else {Write-Warning "AppX Edge is being left, there might be a stub..."}
+		} else {Write-Verbose "AppX Edge is being left, there might be a stub..."}
 	}
 	if ($removeWebView) {
-		Write-Warning "Uninstalling Edge WebView..."
+		Write-Verbose "Uninstalling Edge WebView..."
 		RemoveWebView
 	}
 	if ($removeEdge -and $removeWebView) {
-		Write-Warning "Deleting Edge Update..."
+		Write-Verbose "Deleting Edge Update..."
 		DeleteEdgeUpdate
 	}
-	Write-Warning "Applying EdgeUpdate policies..."
+	Write-Verbose "Applying EdgeUpdate policies..."
 	BlockEdgeInstallandUpdates
 }
 
@@ -305,7 +305,7 @@ function ReinstallWarning {
 }
 
 function Completed {
-	Write-Host "`nCompleted." -ForegroundColor Green
+	#Write-Host "`nCompleted." -ForegroundColor Green
 	if (!$Exit) {
 		PauseNul "Press any key to exit... "
 	}
