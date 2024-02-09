@@ -1,5 +1,7 @@
 # Windex
 
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
+
 Clean Windows of as much bloatware and telemetry as possible without impeding normal function.
 
 ## Basic use
