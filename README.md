@@ -4,6 +4,13 @@
 
 Clean Windows of as much bloatware and telemetry as possible without impeding normal function.
 
+## Available Actions
+
+* AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
+* App Installer Debloat (to remove apps found on the [winget manifests](./defs/winget/))
+* Apply Winex-recommended system tweaks (those found in the [autorun](./tweaks/autorun/) directory)
+* Manually apply optional system tweaks (those found in the [optional](./tweaks/optional/) directory)
+
 ## Basic use
 
 Must be ran in an **elevated** PowerShell instance. **Reboot when complete.**
@@ -16,13 +23,6 @@ Set-ExecutionPolicy Bypass -Scope Process # Confirm with Y or A
 ## Detailed documentation
 
 __Work in progress__
-
-## Available Actions
-
-* AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
-* App Installer Debloat (to remove apps found on the [winget manifests](./defs/winget/))
-* Apply Winex-recommended system tweaks (those found in the [autorun](./tweaks/autorun/) directory)
-* Manually apply optional system tweaks (those found in the [optional](./tweaks/optional/) directory)
 
 ## Planned development
 
