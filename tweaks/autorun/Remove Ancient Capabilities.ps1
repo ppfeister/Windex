@@ -38,12 +38,11 @@ $packages = @(
 
 if ($Undo) {
     ForEach ($package in $packages) {
-        Add-WindowsCapability -Name $package -Online -ErrorAction Continue
+        Add-WindowsCapability -Name $package -Online -ErrorAction Continue -Verbose:$false | Out-Null
     }
-    return 0
+    return
 }
 
 ForEach ($package in $packages) {
-    Remove-WindowsCapability -Name $package -Online -ErrorAction Continue
+    Remove-WindowsCapability -Name $package -Online -ErrorAction Continue -Verbose:$false | Out-Null
 }
-return 0

@@ -42,4 +42,5 @@ foreach ($SID in $KnownSIDs) {
 #Set-ItemProperty -Path "registry::HKU\UserSkel\Software\Microsoft\Windows\CurrentVersion\Search" -Name SearchBoxTaskbarMode -Value 0 -Type DWord -Force
 #REG UNLOAD HKU\UserSkel
 
-Write-Host "Changes made to the active user will be reflected in the next session."
+Write-Verbose "Restarting Explorer to update the taskbar."
+Get-Process Explorer | Stop-Process

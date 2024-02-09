@@ -35,7 +35,7 @@ $userProfiles = Get-ChildItem "$env:SystemDrive\Users" `
 | Where-Object { $_.Name -ne "Public" } `
 | Where-Object { $_.Name -ne "Default" }
 
-Write-Verbose "Users found for Start Menu override: $($userProfiles.Name -join ', ')."
+Write-Verbose "Users found for Start Menu override: $($userProfiles.Name -join ', ')"
 
 ##### Apply Template
 
@@ -47,7 +47,7 @@ Import-StartLayout -LayoutPath "$layoutSourceUri" -MountPath "$env:SystemDrive\"
 # Applies template to each existing user
 foreach ($profile in $userProfiles) {
     $ntuserPath = $profile.FullName
-    Write-Verbose "Copying Start Menu override to $($profile.Name)'s profile."
+    Write-Verbose "Copying Start Menu override to $($profile.Name)"
     Copy-Item -Path "$layoutSourceUri" -Destination "$ntuserPath\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml" -Force
 }
 
@@ -66,7 +66,7 @@ foreach ($profile in $userProfiles) {
     }
 
     if (Test-Path "HKU\IdleUser\$regKey") {
-        Remove-Item "registry::HKU\IdleUser\$regKey"  -Force -Recurse
+        Remove-Item "registry::HKU\IdleUser\$regKey"  -Force -Recurse -Verbose:$true
         Write-Verbose "Registry key deleted to reset $($profile.Name)'s Start Menu cache."
     } else {
         Write-Verbose "Registry key not found for $($profile.Name). Their cache may not exist. Skipping."
@@ -80,8 +80,12 @@ $KnownSIDs = Get-ChildItem registry::HKEY_USERS\ `
 
 foreach ($SID in $KnownSIDs) {
     try {
+        Write-Verbose "Removing Start Layout cache from SID $(($SID -split '\\')[1])"
         Remove-Item "registry::$SID\$regKey" -Recurse -Force
     } catch {
-        Write-Error "Failed to remove Start Layout cache key for $SID"
+        Write-Error "Failed to remove Start Layout cache from $SID"
     }
 }
+
+Write-Verbose "Restarting Explorer to rebuild current user's Start Layout cache"
+Get-Process Explorer | Stop-Process
