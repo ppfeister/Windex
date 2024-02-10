@@ -26,7 +26,7 @@ __Work in progress__
 
 ## Planned development
 
-- [ ] Remove additional telemtry
+- [ ] Remove additional telemetry
 - [ ] Create some sort of deployment pipeline for easier fetch and exec (possibly to one of the Windows package managers)
 - [ ] Create some sort of executable with GUI
 - [ ] Add normally-hidden tweak for the installation of hypervisor guest agents
