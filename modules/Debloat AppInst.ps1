@@ -91,7 +91,7 @@ function loadManifest {
     try {
         $itemNames = Get-Content -Path "$ManifestUri" -ErrorAction Stop
     } catch {
-        throw "Failed to load AppX manifest $ManifestUri."
+        throw "Failed to load winget manifest $ManifestUri."
     }
 
     $itemNames = filterManifest $itemNames
