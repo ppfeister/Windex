@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+; Disables the ability to add new Microsoft Accounts
+; For safety, this does not prevent already linked accounts from signing in.
+; To prevent already linked accounts from signing in as well, use value 3 instead of 1.
+
+; This value (1 or 3) also means that when creating new users, you won't have to skip through
+; several pages of Microsoft Account prompts before being able to add local instead.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"NoConnectedUser"=dword:00000001

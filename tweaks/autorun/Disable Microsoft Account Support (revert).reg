@@ -1,0 +1,6 @@
+Windows Registry Editor Version 5.00
+
+; Enables the ability to add new Microsoft Accounts
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"NoConnectedUser"=dword:00000000
