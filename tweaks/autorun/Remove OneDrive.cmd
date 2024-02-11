@@ -1,9 +1,9 @@
-::::::::::::
+:::::::::::::
 :: This tweak was sourced from the Atlas OS project and is licensed under the GNU General Public License v3.0.
-:: Source: https://github.com/Atlas-OS/Atlas/blob/eeccd115c8fe2605ba77b873a032383c545f4d52/src/playbook/Executables/ONED.cmd
-:: License: https://github.com/Atlas-OS/Atlas/blob/eeccd115c8fe2605ba77b873a032383c545f4d52/LICENSE
-:: Outside of this attribution, the original code remains fully intact and there are currently no changes to document.
-::::::::::::
+:: Source	: https://github.com/Atlas-OS/Atlas/blob/eeccd115c8fe2605ba77b873a032383c545f4d52/src/playbook/Executables/ONED.cmd
+:: License	: https://github.com/Atlas-OS/Atlas/blob/eeccd115c8fe2605ba77b873a032383c545f4d52/LICENSE
+:: The linked point-in-time source serves as a differential to document any modifications.
+:::::::::::::
 
 @echo off
 
