@@ -152,38 +152,19 @@ if ($sysenv -ne "Win32NT") {
 
 $result = DisplayMenu
 
-if ($result -eq "Cancel") {
-    Write-Host "No action taken.`n"
-    return
-}
+# less than ideal arg handling, but it works
 
-if ($result -ne "Begin") {
-    return "Somehow, an invalid result was returned from the menu. Exiting."
-}
+if ($result -eq "Cancel")   { return "User cancelled. Exiting." }
+if ($result -ne "Begin")    { return "Somehow, an invalid result was returned from the menu. Exiting." }
 
-if ($options[$menuItem_SetVerbosity]) {
-    $VerbosePreference = "Continue"
-    Write-Verbose "Higher verbosity enabled."
-}
+if ($options[$menuItem_SetVerbosity])   { $VerbosePreference = "Continue" }
 
-if ($options[$menuItem_MetroDebloatMS]) {
-    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft"
-}
-
-if ($options[$menuItem_MetroDebloat3P]) {
-    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty"
-}
-
-if ($options[$menuItem_RemoveEdge]) {
-    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
-}
-
-if ($options[$menuItem_WingetDebloat]) {
-    . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name"
-}
-
-if ($options[$menuItem_AutoApplyTweaks]) {
-    . "$WindexRoot\modules\Autorun Tweaks.ps1"
-}
+if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft" }
+if ($options[$menuItem_MetroDebloat3P]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty" }
+if ($options[$menuItem_RemoveEdge])     { . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false }
+if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
+if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Autorun Tweaks.ps1" }
 
 Get-Process Explorer | Stop-Process
+
+Write-Host "Reboot is recommended."
