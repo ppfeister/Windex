@@ -1,6 +1,0 @@
-Windows Registry Editor Version 5.00
-
-; Enables the new user welcome animation (for first login)
-
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System]
-"EnableFirstLogonAnimation"=dword:00000001

@@ -1,6 +1,0 @@
-Windows Registry Editor Version 5.00
-
-; Disables the notification pane and removes the icon from the taskbar
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer]
-"DisableNotificationCenter"=-

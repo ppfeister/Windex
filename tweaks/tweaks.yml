@@ -1,0 +1,186 @@
+- tweak: Disable Meet Now
+  actions:
+    - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+      subkey: HideSCAMeetNow
+      value: dword:00000001
+
+- tweak: Disable Microsoft Account support
+  actions:
+    - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
+      subkey: NoConnectedUser
+      value: dword:00000001
+      # dword:1 will prevent currently unlinked accounts from becoming linked
+      # dword:3 will do the above, but also prevent currently linked accounts from logging in
+      # dword:3 is only safe if you're already using a local account (in which case, it's recommended)
+    - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
+      subkey: DisableUserAuth
+      value: dword:00000001
+
+- tweak: Disable action center (a/k/a notification pane)
+  actions:
+    - regset: HKCU\Software\Policies\Microsoft\Windows\Explorer
+      subkey: DisableNotificationCenter
+      value: dword:00000001
+
+- tweak: Disable OOBE for new users
+  actions:
+    - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
+      subkey: EnableFirstLogonAnimation
+      value: dword:0
+    - regset: HKLM\Software\Policies\Microsoft\Windows\OOBE
+      subkey: DisableOOBE
+      value: dword:00000001
+      # TODO: DisableOOBE subkey will bypass privacy selection screen. Make sure to set defaults.
+
+- tweak: Prune Content Delivery Manager
+  actions:
+    - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+      subkey:
+        - FeatureManagementEnabled
+        - OemPreInstalledAppsEnabled
+        - PreInstalledAppsEnabled
+        - RotatingLockScreenEnabled
+        - RotatingLockScreenOverlayEnabled
+        - SilentInstalledAppsEnabled
+        - SoftLandingEnabled
+        - SystemPaneSuggestionsEnabled
+        - SlideshowEnabled
+        - ContentDeliveryAllowed
+        - SubscribedContent-338389Enabled
+        - SubscribedContent-338388Enabled
+        - PreInstalledAppsEverEnabled
+      value: dword:00000000
+    - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
+      subkey:
+        - 7EE7776C.LinkedInforWindows_w1wdnht996qgy
+        - Clipchamp.Clipchamp_yxz26nhyzhsrt
+        - Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe
+        - Microsoft.Todos_8wekyb3d8bbwe
+        - Microsoft.WindowsCalculator_8wekyb3d8bbwe
+        - Microsoft.ZuneVideo_8wekyb3d8bbwe
+        - SpotifyAB.SpotifyMusic_zpdnekdrzrea0
+      value: dword:00000000
+
+- tweak: Disable idle lock screen
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\Personalization
+      subkey: NoLockScreen
+      value: dword:00000001
+
+- tweak: Hide recycle bin from desktop
+  actions:
+    - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\NonEnum
+      subkey: {645FF040-5081-101B-9F08-00AA002F954E}
+      value: dword:00000001
+
+- tweak: Disable third party application toast notifications and some live tiles
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications
+      subkey:
+        - NoToastApplicationNotification
+        - NoToastApplicationNotificationOnLockScreen
+        - NoTileApplicationNotification
+      value: dword:00000001
+
+- tweak: Disable recent document history in Explorer
+  actions:
+    - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+      subkey: NoRecentDocsHistory
+      value: dword:00000001
+
+- tweak: Hide recently installed app list from Start Menu
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\Explorer
+      subkey: HideRecentlyAddedApps
+      value: dword:00000001
+
+- tweak: Disable Cloud Content and Spotlight items
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\CloudContent
+      subkey: ConfigureWindowsSpotlight
+      value: dword:00000002
+    - regset: HKLM\Software\Policies\Microsoft\Windows\CloudContent
+      subkey:
+        - DisableThirdPartySuggestions
+        - DisableTailoredExperiencesWithDiagnosticData
+        - DisableWindowsSpotlightFeatures
+        - DisableWindowsSpotlightWindowsWelcomeExperience
+        - DisableWindowsSpotlightOnActionCenter
+        - DisableWindowsSpotlightOnSettings
+      value: dword:00000001
+
+#- tweak: Disable annoying or interactive telemetry items
+#  actions:
+#    - regset: HKLM\Software\Policies\Microsoft\Windows\DataCollection
+#      subkey:
+#        - DoNotShowFeedbackNotifications
+
+- tweak: Disable animations (for snappier feeling)
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\DWM
+      subkey: DisallowAnimations
+      value: dword:00000001
+
+- tweak: Disable Find My Device tracking
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\FindMyDevice
+      subkey: AllowFindMyDevice
+      value: dword:00000000
+
+- tweak: Disable location tracking and sensors
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors
+      subkey:
+        - DisableLocation
+        - DisableLocationScripting
+        - DisableSensors
+      value: dword:00000001
+
+- tweak: Suppress and attempt to block OneDrive
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\OneDrive
+      subkey:
+        - PreventNetworkTrafficPreUserSignIn
+        - DisableFileSyncNGSC
+      value: dword:00000001
+      # first keypath is questionable but seems to also be used for some things some times
+    - regset: HKLM\Software\Policies\Microsoft\OneDrive
+      subkey:
+        - PreventNetworkTrafficPreUserSignIn
+        - DisableFileSync
+        - DisableFileSyncNGSC
+      value: dword:00000001
+    - regset: HKLM\Software\Microsoft\OneDrive
+      subkey: KFMBlockOptIn
+      value: dword:00000002
+
+- tweak: Prune Cortana / Search
+  actions:
+    - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Search
+      subkey:
+        - EnableDynamicContentInWSB
+        - AllowCloudSearch # Indexing sources like OneDrive and SharePoint
+        - AllowCortana
+        - AllowCortanaAboveLock
+        - AllowSearchToUseLocation
+        - ConnectedSearchUseWeb # Doesn't seem to actually work anymore, leaving just in case
+      value: dword:00000000
+    - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Search
+      subkey:
+        - PreventIndexingEmailAttachments
+        - PreventIndexingOutlook
+      value: dword:00000001
+    - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\Search
+      subkey:
+        - BingSearchEnabled
+        - AllowSearchToUseLocation
+        - CortanaConsent
+      value: dword:00000000
+
+- tweak: Disable automatic Game Bar enablement
+  actions:
+    - regset: HKLM\Software\Microsoft\GameBar
+      subkey:
+        - AllowAutoGameMode
+        - AutoGameModeEnabled
+      value: dword:00000000

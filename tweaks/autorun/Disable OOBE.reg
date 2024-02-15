@@ -1,7 +1,0 @@
-Windows Registry Editor Version 5.00
-
-; Disables the OOBE for new users.
-; Leaving OOBE enabled will also cause some other default settings to be ignored by Windows.
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE]
-"DisablePrivacyExperience"=dword:00000001
