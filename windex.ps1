@@ -43,12 +43,13 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 ###########################
 #### Windex Setup Menu ####
 
-$menuItem_SetVerbosity = "Mode: Verbose"
-$menuItem_MetroDebloatMS = "Module: Metro de-bloat, Microsoft (i.e. Mahjong)"
-$menuItem_MetroDebloat3P = "Module: Metro de-bloat, 3rd Party (i.e. LinkedIn) **Slow**"
-$menuItem_AutoApplyTweaks = "Module: Apply Windex-preferred tweaks"
-$menuItem_WingetDebloat = "Module: Debloat App Installer (requires winget)"
-$menuItem_RemoveEdge = "System Tweak: Permanently remove Edge **Experimental**"
+$menuItem_SetVerbosity = "Verbose"
+$menuItem_MetroDebloatMS = "Debloat Microsoft Metro apps (i.e. Mahjong)"
+$menuItem_MetroDebloat3P = "Debloat OEM Metro apps (i.e. LinkedIn) **Slow**"
+$menuItem_AutoApplyTweaks = "Apply Windex-preferred tweaks"
+$menuItem_WingetDebloat = "Debloat App Installer (requires winget)"
+$menuItem_RemoveEdge = "Permanently remove Edge **Experimental**"
+$menuItem_DisableServices = "Disable unnecessary system services"
 
 $options = @{
     $menuItem_MetroDebloatMS = $true
@@ -57,6 +58,7 @@ $options = @{
     $menuItem_AutoApplyTweaks = $true
     $menuItem_RemoveEdge = $false
     $menuItem_WingetDebloat = $true
+    $menuItem_DisableServices = $true
 }
 
 function DisplayMenu {
@@ -163,6 +165,7 @@ if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps
 if ($options[$menuItem_MetroDebloat3P]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty" }
 if ($options[$menuItem_RemoveEdge])     { . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false }
 if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
+if ($options[$menuItem_DisableServices]){ . "$WindexRoot\modules\Disable System Services.ps1" }
 if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Autorun Tweaks.ps1" }
 
 Get-Process Explorer | Stop-Process
