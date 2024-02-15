@@ -8,6 +8,7 @@ Clean Windows of as much bloatware and telemetry as possible without impeding no
 
 * AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
 * App Installer Debloat (to remove apps found on the [winget manifests](./defs/winget/))
+* Prune system services from autorun
 * Apply Winex-recommended system tweaks (those found in the [autorun](./tweaks/autorun/) directory)
 * Manually apply optional system tweaks (those found in the [optional](./tweaks/optional/) directory)
 
