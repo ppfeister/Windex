@@ -28,7 +28,7 @@ param (
 
 $SourceUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\..\assets\Wallpapers\"
 $StoredUri = "$env:SystemRoot\Windex\Wallpapers\"
-$WallpaperToUse = "Wallpaper_01.jpg"
+$WallpaperToUse = "Wallpaper_00.jpg"
 
 
 New-Item -ItemType Directory -Path (Split-Path -Path $StoredUri -Parent) -Force -ErrorAction Stop | Out-Null
