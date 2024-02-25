@@ -87,5 +87,44 @@ foreach ($SID in $KnownSIDs) {
     }
 }
 
+####             ####
+##  Clean up menu  ##
+####             ####
+
+$globalStartMenuPaths = @(
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessibility',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Maintenance',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Settings',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\System Tools'
+)
+
+$typicalUserStartMenuPaths = @(
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessories',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessibility',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools'
+)
+
+foreach ($path in $globalStartMenuPaths) {
+        Remove-Item -Path "$path" -Force -Recurse -ErrorAction SilentlyContinue
+}
+
+foreach ($path in $typicalUserStartMenuPaths) {
+    Remove-Item -Path "$path" -Force -Recurse -ErrorAction SilentlyContinue # for default profile first
+    foreach ($profile in $userProfiles) {
+        $path.replace("Default", $profile.Name) | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+    }    
+}
+
+#### Finish ####
+
 Write-Verbose "Restarting Explorer to rebuild current user's Start Layout cache"
 Get-Process Explorer | Stop-Process
