@@ -1,7 +1,7 @@
 # Windex
 # https://github.com/ppfeister/windex
 #
-# MAINTAINER : Paul Pfeister (github.com/ppfeister)
+# MAINTAINER : Paul Pfeister ( https://github.com/ppfeister : https://pfeister.dev )
 #            :
 # PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
 #            : mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
