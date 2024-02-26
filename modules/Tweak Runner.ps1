@@ -48,9 +48,12 @@ function UpdateAllUserHives {
         if ($regLoadOut -match "ERROR: The process cannot access the file because it is being used by another process.") {
             continue
         }
+
+        if (!(Test-Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")")) {
+            New-Item -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Force | Out-Null
+        }
         
-        #Invoke-Expression "REG ADD registry::HKU\IdleUser\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1"
-        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue
+        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue | Out-Null
         Invoke-Expression 'reg unload "HKU\IdleUser" 2>&1' | Out-Null
     }
     
@@ -59,8 +62,10 @@ function UpdateAllUserHives {
     | Select-String -Pattern '^HKEY_USERS\\S-1-5-21-[\d-]+?$'
     
     foreach ($SID in $KnownSIDs) {
-        #Invoke-Expression "REG ADD registry::$SID\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1"
-        Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue
+        if (!(Test-Path "registry::$SID\$($Key -replace "<USERS>")")) {
+            New-Item -Path "registry::$SID\$($Key -replace "<USERS>")" -Force | Out-Null
+        }
+        Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue | Out-Null
     }
 }
 
@@ -75,9 +80,10 @@ $tweaksParsed | ForEach-Object {
                 if ($action.regset.StartsWith("<USERS>")) {
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
-                    #Invoke-Expression "REG ADD $($action.regset) /v $subkey /t $($action.value.Split(':')[0]) /d $($action.value.Split(':')[1]) /f > nul 2>&1"
-                    # Set-ItemProperty currently has issues on systems where -Type doesn't exist yet
-                    Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $action.value.Split(':')[1] -Force -ErrorAction Continue
+                    if (!(Test-Path "registry::$($action.regset)")) {
+                        New-Item -Path "registry::$($action.regset)" -Force | Out-Null
+                    }
+                    Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $($action.value.Split(':')[1]) -Type $($action.value.Split(':')[0]) -Force  | Out-Null
                 }
             }
         }

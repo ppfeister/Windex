@@ -3,37 +3,37 @@
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
     subkey: HideSCAMeetNow
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable Microsoft Account support"
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
     subkey: NoConnectedUser
-    value: REG_DWORD:00000001
-    # REG_DWORD:1 will prevent currently unlinked accounts from becoming linked
-    # REG_DWORD:3 will do the above, but also prevent currently linked accounts from logging in
-    # REG_DWORD:3 is only safe if you're already using a local account (in which case, it's recommended)
+    value: dword:00000001
+    # dword:1 will prevent currently unlinked accounts from becoming linked
+    # dword:3 will do the above, but also prevent currently linked accounts from logging in
+    # dword:3 is only safe if you're already using a local account (in which case, it's recommended)
   - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
     subkey: DisableUserAuth
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable action center (a/k/a notification pane)"
   actions:
   - regset: HKCU\Software\Policies\Microsoft\Windows\Explorer
     subkey: DisableNotificationCenter
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable OOBE for new users"
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
     subkey: EnableFirstLogonAnimation
-    value: REG_DWORD:0
+    value: dword:0
   - regset: HKLM\Software\Policies\Microsoft\Windows\OOBE
     subkey: DisableOOBE
-    value: REG_DWORD:00000001
+    value: dword:00000001
     # TODO: DisableOOBE subkey will bypass privacy selection screen. Make sure to set privacy defaults.
 
 -
@@ -54,7 +54,7 @@
       - SubscribedContent-338389Enabled
       - SubscribedContent-338388Enabled
       - PreInstalledAppsEverEnabled
-    value: REG_DWORD:00000000
+    value: dword:00000000
   - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps
     subkey:
       - 7EE7776C.LinkedInforWindows_w1wdnht996qgy
@@ -64,21 +64,21 @@
       - Microsoft.WindowsCalculator_8wekyb3d8bbwe
       - Microsoft.ZuneVideo_8wekyb3d8bbwe
       - SpotifyAB.SpotifyMusic_zpdnekdrzrea0
-    value: REG_DWORD:00000000
+    value: dword:00000000
 
 -
   name: "Disable idle lock screen"
   actions:
   - regset: HKLM\Software\Policies\Microsoft\Windows\Personalization
     subkey: NoLockScreen
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Hide recycle bin from desktop"
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\NonEnum
     subkey: {645FF040-5081-101B-9F08-00AA002F954E}
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable third party application toast notifications and some live tiles"
@@ -88,28 +88,28 @@
       - NoToastApplicationNotification
       - NoToastApplicationNotificationOnLockScreen
       - NoTileApplicationNotification
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable recent document history in Explorer"
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
     subkey: NoRecentDocsHistory
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Hide recently installed app list from Start Menu"
   actions:
   - regset: HKLM\Software\Policies\Microsoft\Windows\Explorer
     subkey: HideRecentlyAddedApps
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable Cloud Content and Spotlight items"
   actions:
   - regset: HKLM\Software\Policies\Microsoft\Windows\CloudContent
     subkey: ConfigureWindowsSpotlight
-    value: REG_DWORD:00000002
+    value: dword:00000002
   - regset: HKLM\Software\Policies\Microsoft\Windows\CloudContent
     subkey:
       - DisableThirdPartySuggestions
@@ -118,7 +118,7 @@
       - DisableWindowsSpotlightWindowsWelcomeExperience
       - DisableWindowsSpotlightOnActionCenter
       - DisableWindowsSpotlightOnSettings
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 #-
 #  name: Disable annoying or interactive telemetry items
@@ -131,14 +131,14 @@
   actions:
   - regset: HKLM\Software\Policies\Microsoft\Windows\DWM
     subkey: DisallowAnimations
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Disable Find My Device tracking"
   actions:
   - regset: HKLM\Software\Policies\Microsoft\FindMyDevice
     subkey: AllowFindMyDevice
-    value: REG_DWORD:00000000
+    value: dword:00000000
 
 -
   name: "Disable location tracking and sensors"
@@ -148,7 +148,7 @@
       - DisableLocation
       - DisableLocationScripting
       - DisableSensors
-    value: REG_DWORD:00000001
+    value: dword:00000001
 
 -
   name: "Suppress and attempt to block OneDrive"
@@ -157,17 +157,17 @@
     subkey:
       - PreventNetworkTrafficPreUserSignIn
       - DisableFileSyncNGSC
-    value: REG_DWORD:00000001
+    value: dword:00000001
     # first keypath is questionable but seems to also be used for some things some times
   - regset: HKLM\Software\Policies\Microsoft\OneDrive
     subkey:
       - PreventNetworkTrafficPreUserSignIn
       - DisableFileSync
       - DisableFileSyncNGSC
-    value: REG_DWORD:00000001
+    value: dword:00000001
   - regset: HKLM\Software\Microsoft\OneDrive
     subkey: KFMBlockOptIn
-    value: REG_DWORD:00000002
+    value: dword:00000002
 
 -
   name: "Prune Cortana / Windows Search"
@@ -180,18 +180,18 @@
       - AllowCortanaAboveLock
       - AllowSearchToUseLocation
       - ConnectedSearchUseWeb # Doesn't seem to actually work anymore, leaving just in case
-    value: REG_DWORD:00000000
+    value: dword:00000000
   - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Search
     subkey:
       - PreventIndexingEmailAttachments
       - PreventIndexingOutlook
-    value: REG_DWORD:00000001
+    value: dword:00000001
   - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\Search
     subkey:
       - BingSearchEnabled
       - AllowSearchToUseLocation
       - CortanaConsent
-    value: REG_DWORD:00000000
+    value: dword:00000000
 
 -
   name: "Disable automatic Game Bar enablement"
@@ -200,7 +200,7 @@
     subkey:
       - AllowAutoGameMode
       - AutoGameModeEnabled
-    value: REG_DWORD:00000000
+    value: dword:00000000
 
 -
   name: "Disable Windows Defender Firewall (permanently)"
@@ -210,7 +210,7 @@
   optionals:
   - regset: HKLM\Software\Policies\Microsoft\WindowsFirewall\StandardProfile
     subkey: EnableFirewall
-    value: REG_DWORD:00000000
+    value: dword:00000000
   # For Windows 10...
   # The fischer price settings will show the firewall as disabled while still showing Green/Satistfactory status.
   # The original settings will show disabled and the expected Red/Unsatistfactory status.
