@@ -1,4 +1,8 @@
 ?.?.?   + enhance   Adapted Windex to support easily configurable playbooks
+        + enhance   Expanded upon existing manifests
+        + enhance   Expanded upon existing Explorer cleanup tweaks
+        + feature   Added a new module to disable system services
         + feature   Disallow new Microsoft Accounts (streamlining local user creation)
         + feature   Suppress the welcome animation displayed upon new user sign in
+        @ refactor  Refactored and adjusted some sections to be more readable and more easily expanded upon
 0.1.0   + init      First release
