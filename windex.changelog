@@ -1,4 +1,4 @@
-?.?.?   + enhance   Adapted Windex to support easily configurable playbooks
+0.1.1   + enhance   Adapted Windex to support easily configurable playbooks
         + enhance   Expanded upon existing manifests
         + enhance   Expanded upon existing Explorer cleanup tweaks
         + feature   Added a new module to disable system services
