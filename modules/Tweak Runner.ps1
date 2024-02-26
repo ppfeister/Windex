@@ -49,8 +49,8 @@ function UpdateAllUserHives {
             continue
         }
         
-        REG ADD registry::HKU\IdleUser\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1
-        #Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
+        #Invoke-Expression "REG ADD registry::HKU\IdleUser\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1"
+        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue
         Invoke-Expression 'reg unload "HKU\IdleUser" 2>&1' | Out-Null
     }
     
@@ -59,13 +59,8 @@ function UpdateAllUserHives {
     | Select-String -Pattern '^HKEY_USERS\\S-1-5-21-[\d-]+?$'
     
     foreach ($SID in $KnownSIDs) {
-        try {
-            REG ADD registry::$SID\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1
-            #Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
-            Remove-Item "registry::$SID\$regKey" -Recurse -Force
-        } catch {
-            Write-Error "Failed to update user hive of SID $SID"
-        }
+        #Invoke-Expression "REG ADD registry::$SID\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1"
+        Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue
     }
 }
 
@@ -80,9 +75,9 @@ $tweaksParsed | ForEach-Object {
                 if ($action.regset.StartsWith("<USERS>")) {
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
-                    REG ADD $action.regset /v $subkey /t $action.value.Split(':')[0] /d $action.value.Split(':')[1] /f > nul 2>&1
+                    #Invoke-Expression "REG ADD $($action.regset) /v $subkey /t $($action.value.Split(':')[0]) /d $($action.value.Split(':')[1]) /f > nul 2>&1"
                     # Set-ItemProperty currently has issues on systems where -Type doesn't exist yet
-                    #Set-ItemProperty -Path $action.regset -Name $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0] -Force -ErrorAction Continue
+                    Set-ItemProperty -Path $action.regset -Name $subkey -Value $action.value.Split(':')[1] -Force -ErrorAction Continue
                 }
             }
         }
