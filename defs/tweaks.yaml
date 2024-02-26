@@ -218,3 +218,10 @@
   # The fischer price settings will show the firewall as disabled while still showing Green/Satistfactory status.
   # The original settings will show disabled and the expected Red/Unsatistfactory status.
   # Since the fischer price one is green, "firewall disabled" notifications should no longer appear.
+
+-
+  name: Disable Windows Feeds
+  actions:
+  - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Feeds
+    subkey: EnableFeeds
+    value: dword:00000000
