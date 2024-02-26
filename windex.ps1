@@ -1,7 +1,7 @@
 # Windex
 # https://github.com/ppfeister/windex
 #
-# MAINTAINER : Paul Pfeister (github.com/ppfeister)
+# MAINTAINER : Paul Pfeister ( https://github.com/ppfeister : https://pfeister.dev )
 #            :
 # PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
 #            : mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
@@ -159,6 +159,8 @@ $result = DisplayMenu
 if ($result -eq "Cancel")   { return "User cancelled. Exiting." }
 if ($result -ne "Begin")    { return "Somehow, an invalid result was returned from the menu. Exiting." }
 
+Write-Host "Beginning cleanup..."
+
 if ($options[$menuItem_SetVerbosity])   { $VerbosePreference = "Continue" }
 
 if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft" }
@@ -167,6 +169,7 @@ if ($options[$menuItem_RemoveEdge])     { . "$WindexRoot\tweaks\optional\Remove 
 if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
 if ($options[$menuItem_DisableServices]){ . "$WindexRoot\modules\Disable System Services.ps1" }
 if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Autorun Tweaks.ps1" }
+if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Tweak Runner.ps1" }
 
 Get-Process Explorer | Stop-Process
 
