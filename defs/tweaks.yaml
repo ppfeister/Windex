@@ -77,7 +77,7 @@
   name: "Hide recycle bin from desktop"
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\NonEnum
-    subkey: {645FF040-5081-101B-9F08-00AA002F954E}
+    subkey: "{645FF040-5081-101B-9F08-00AA002F954E}"
     value: dword:00000001
 
 -

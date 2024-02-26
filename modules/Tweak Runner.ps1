@@ -29,6 +29,7 @@ $tweaksParsed = ConvertFrom-Yaml $tweakPlaybook
 Write-Verbose "Found $($tweaksParsed.Count) tweaks to apply in playbook"
 
 function UpdateAllUserHives {
+    # HCKU/NTUSER.DAT TWEAKS APPLIED HERE
     param (
         [Parameter(Position = 0, Mandatory = $true)] [string] $Key,
         [Parameter(Position = 1, Mandatory = $true)] [string] $Subkey,
@@ -50,6 +51,7 @@ function UpdateAllUserHives {
         }
 
         if (!(Test-Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")")) {
+            New-Item -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Type $Type -Force | Out-Null
             New-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Type $Type -Force | Out-Null
         }
         
@@ -63,6 +65,7 @@ function UpdateAllUserHives {
     
     foreach ($SID in $KnownSIDs) {
         if (!(Test-Path "registry::$SID\$($Key -replace "<USERS>")")) {
+            New-Item -Path "registry::$SID\$($Key -replace "<USERS>")" -Type $Type -Force | Out-Null
             New-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Type $Type -Force | Out-Null
         }
         Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue | Out-Null
@@ -78,9 +81,12 @@ $tweaksParsed | ForEach-Object {
             $action.subkey | ForEach-Object {
                 $subkey = $_
                 if ($action.regset.StartsWith("<USERS>")) {
+                    # HKCU/NTUSER.DAT TWEAKS APPLIED IN F(X) UpdateAllUserHives
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
+                    # HKLM TWEAKS APPLIED HERE
                     if (!(Test-Path "registry::$($action.regset)")) {
+                        New-Item -Path "registry::$($action.regset)" -Type $($action.value.Split(':')[0]) -Force | Out-Null
                         New-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Type $($action.value.Split(':')[0]) -Force | Out-Null
                     }
                     Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $($action.value.Split(':')[1]) -Type $($action.value.Split(':')[0]) -Force  | Out-Null
