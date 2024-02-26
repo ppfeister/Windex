@@ -167,6 +167,7 @@ if ($options[$menuItem_RemoveEdge])     { . "$WindexRoot\tweaks\optional\Remove 
 if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
 if ($options[$menuItem_DisableServices]){ . "$WindexRoot\modules\Disable System Services.ps1" }
 if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Autorun Tweaks.ps1" }
+if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Tweak Runner.ps1" }
 
 Get-Process Explorer | Stop-Process
 
