@@ -19,7 +19,9 @@ Latest release: https://github.com/ppfeister/Windex/releases/latest
 
 $WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\.."
 
-Import-Module -Name "$WindexRootUri\modules\submodules\psyaml\powershell-yaml.psm1" -Verbose:$false
+Get-ChildItem -Path "$WindexRootUri\modules\submodules\psyaml" -Recurse | Unblock-File
+#Invoke-Command { & "powershell.exe" } -NoNewScope # sometimes the current session may need to be refreshed after unblocking
+Import-Module -Name "$WindexRootUri\modules\submodules\psyaml\powershell-yaml.psd1" -Verbose:$false
 
 $tweakPlaybook = Get-Content -Path "$WindexRootUri\defs\tweaks.yaml" -Raw 
 $tweaksParsed = ConvertFrom-Yaml $tweakPlaybook
@@ -46,8 +48,9 @@ function UpdateAllUserHives {
         if ($regLoadOut -match "ERROR: The process cannot access the file because it is being used by another process.") {
             continue
         }
-    
-        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
+        
+        REG ADD registry::HKU\IdleUser\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1
+        #Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
         Invoke-Expression 'reg unload "HKU\IdleUser" 2>&1' | Out-Null
     }
     
@@ -57,7 +60,8 @@ function UpdateAllUserHives {
     
     foreach ($SID in $KnownSIDs) {
         try {
-            Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
+            REG ADD registry::$SID\$($Key -replace "<USERS>") /v $Subkey /t $Type /d $Value /f > nul 2>&1
+            #Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue
             Remove-Item "registry::$SID\$regKey" -Recurse -Force
         } catch {
             Write-Error "Failed to update user hive of SID $SID"
@@ -76,7 +80,9 @@ $tweaksParsed | ForEach-Object {
                 if ($action.regset.StartsWith("<USERS>")) {
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
-                    Set-ItemProperty -Path $action.regset -Name $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0] -Force -ErrorAction Continue
+                    REG ADD $action.regset /v $subkey /t $action.value.Split(':')[0] /d $action.value.Split(':')[1] /f > nul 2>&1
+                    # Set-ItemProperty currently has issues on systems where -Type doesn't exist yet
+                    #Set-ItemProperty -Path $action.regset -Name $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0] -Force -ErrorAction Continue
                 }
             }
         }
