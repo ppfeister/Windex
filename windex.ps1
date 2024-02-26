@@ -159,6 +159,8 @@ $result = DisplayMenu
 if ($result -eq "Cancel")   { return "User cancelled. Exiting." }
 if ($result -ne "Begin")    { return "Somehow, an invalid result was returned from the menu. Exiting." }
 
+Write-Host "Beginning cleanup..."
+
 if ($options[$menuItem_SetVerbosity])   { $VerbosePreference = "Continue" }
 
 if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft" }
