@@ -1,12 +1,12 @@
 # Windex
-# github.com/ppfeister/windex
+# https://github.com/ppfeister/windex
 #
-# MAINTAINER : Paul Pfeister (github.com/ppfeister)
-# 
+# MAINTAINER : Paul Pfeister ( https://github.com/ppfeister : https://pfeister.dev )
+#            :
 # PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
-#              mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
-#
-# WARRANTY   : No warranty provided whatsoever. Use at your own risk.
+#            : mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
+#            :
+# LICENSE    : GNU General Public License v3.0 : https://github.com/ppfeister/windex/blob/master/LICENSE
 
 <#
 .SYNOPSIS
@@ -43,12 +43,13 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 ###########################
 #### Windex Setup Menu ####
 
-$menuItem_SetVerbosity = "Mode: Verbose"
-$menuItem_MetroDebloatMS = "Module: Metro de-bloat, Microsoft (i.e. Mahjong)"
-$menuItem_MetroDebloat3P = "Module: Metro de-bloat, 3rd Party (i.e. LinkedIn) **Slow**"
-$menuItem_AutoApplyTweaks = "Module: Apply Windex-preferred tweaks"
-$menuItem_WingetDebloat = "Module: Debloat App Installer (requires winget)"
-$menuItem_RemoveEdge = "System Tweak: Permanently remove Edge **Experimental**"
+$menuItem_SetVerbosity = "Verbose"
+$menuItem_MetroDebloatMS = "Debloat Microsoft Metro apps (i.e. Mahjong)"
+$menuItem_MetroDebloat3P = "Debloat OEM Metro apps (i.e. LinkedIn) **Slow**"
+$menuItem_AutoApplyTweaks = "Apply Windex-preferred tweaks"
+$menuItem_WingetDebloat = "Debloat App Installer (requires winget)"
+$menuItem_RemoveEdge = "Permanently remove Edge **Experimental**"
+$menuItem_DisableServices = "Disable unnecessary system services"
 
 $options = @{
     $menuItem_MetroDebloatMS = $true
@@ -57,6 +58,7 @@ $options = @{
     $menuItem_AutoApplyTweaks = $true
     $menuItem_RemoveEdge = $false
     $menuItem_WingetDebloat = $true
+    $menuItem_DisableServices = $true
 }
 
 function DisplayMenu {
@@ -152,38 +154,23 @@ if ($sysenv -ne "Win32NT") {
 
 $result = DisplayMenu
 
-if ($result -eq "Cancel") {
-    Write-Host "No action taken.`n"
-    return
-}
+# less than ideal arg handling, but it works
 
-if ($result -ne "Begin") {
-    return "Somehow, an invalid result was returned from the menu. Exiting."
-}
+if ($result -eq "Cancel")   { return "User cancelled. Exiting." }
+if ($result -ne "Begin")    { return "Somehow, an invalid result was returned from the menu. Exiting." }
 
-if ($options[$menuItem_SetVerbosity]) {
-    $VerbosePreference = "Continue"
-    Write-Verbose "Higher verbosity enabled."
-}
+Write-Host "Beginning cleanup..."
 
-if ($options[$menuItem_MetroDebloatMS]) {
-    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft"
-}
+if ($options[$menuItem_SetVerbosity])   { $VerbosePreference = "Continue" }
 
-if ($options[$menuItem_MetroDebloat3P]) {
-    . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty"
-}
-
-if ($options[$menuItem_RemoveEdge]) {
-    . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
-}
-
-if ($options[$menuItem_WingetDebloat]) {
-    . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name"
-}
-
-if ($options[$menuItem_AutoApplyTweaks]) {
-    . "$WindexRoot\modules\Autorun Tweaks.ps1"
-}
+if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft" }
+if ($options[$menuItem_MetroDebloat3P]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty" }
+if ($options[$menuItem_RemoveEdge])     { . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false }
+if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
+if ($options[$menuItem_DisableServices]){ . "$WindexRoot\modules\Disable System Services.ps1" }
+if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Autorun Tweaks.ps1" }
+if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Tweak Runner.ps1" }
 
 Get-Process Explorer | Stop-Process
+
+Write-Host "Reboot is recommended."

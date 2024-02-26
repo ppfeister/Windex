@@ -7,13 +7,16 @@ Clean Windows of as much bloatware and telemetry as possible without impeding no
 ## Available Actions
 
 * AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
-* App Installer Debloat (to remove apps found on the [winget manifests](./defs/winget/))
-* Apply Winex-recommended system tweaks (those found in the [autorun](./tweaks/autorun/) directory)
-* Manually apply optional system tweaks (those found in the [optional](./tweaks/optional/) directory)
+* App Inst Debloat (to remove apps found on the [winget manifests](./defs/winget/))
+* Prune system services from autorun
+* Auto apply recommended tweaks (i.e. those found in [playbooks](./defs/tweaks.yaml))
+* Allow advanced users to apply a selection of additional tweaks
 
 ## Basic use
 
 Must be ran in an **elevated** PowerShell instance. **Reboot when complete.**
+
+When all modules are enabled **except** AppX OEM Debloat (which takes longer), Windex tends to have a runtime of about 3-5 minutes. The AppX OEM Debloat module is unnecessary on fresh Windows builds.
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process # Confirm with Y or A
 
@@ -26,7 +29,8 @@ __Work in progress__
 
 ## Planned development
 
-- [ ] Remove additional telemtry
+- [x] Adopt playbooks for easier expansion and maintenance
+- [ ] Remove additional telemetry **(in progress)**
 - [ ] Create some sort of deployment pipeline for easier fetch and exec (possibly to one of the Windows package managers)
 - [ ] Create some sort of executable with GUI
 - [ ] Add normally-hidden tweak for the installation of hypervisor guest agents

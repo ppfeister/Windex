@@ -1,12 +1,12 @@
 # Windex
-# github.com/ppfeister/windex
+# https://github.com/ppfeister/windex
 #
-# MAINTAINER : Paul Pfeister (github.com/ppfeister)
-# 
+# MAINTAINER : Paul Pfeister ( https://github.com/ppfeister : https://pfeister.dev )
+#            :
 # PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
-#              mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
-#
-# WARRANTY   : No warranty provided whatsoever. Use at your own risk.
+#            : mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
+#            :
+# LICENSE    : GNU General Public License v3.0 : https://github.com/ppfeister/windex/blob/master/LICENSE
 
 <#
 .SYNOPSIS
@@ -86,6 +86,45 @@ foreach ($SID in $KnownSIDs) {
         Write-Error "Failed to remove Start Layout cache from $SID"
     }
 }
+
+####             ####
+##  Clean up menu  ##
+####             ####
+
+$globalStartMenuPaths = @(
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessibility',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Maintenance',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Settings',
+    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\System Tools'
+)
+
+$typicalUserStartMenuPaths = @(
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessories',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessibility',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
+    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools'
+)
+
+foreach ($path in $globalStartMenuPaths) {
+        Remove-Item -Path "$path" -Force -Recurse -ErrorAction SilentlyContinue
+}
+
+foreach ($path in $typicalUserStartMenuPaths) {
+    Remove-Item -Path "$path" -Force -Recurse -ErrorAction SilentlyContinue # for default profile first
+    foreach ($profile in $userProfiles) {
+        $path.replace("Default", $profile.Name) | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+    }    
+}
+
+#### Finish ####
 
 Write-Verbose "Restarting Explorer to rebuild current user's Start Layout cache"
 Get-Process Explorer | Stop-Process

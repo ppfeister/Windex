@@ -14,6 +14,7 @@ Movies & TV
 OneNote for Windows 10
 Microsoft Engagement Framework
 Store Experience Host
+Snip & Sketch
 Microsoft Pay
 Windows Maps
 Windows Voice Recorder

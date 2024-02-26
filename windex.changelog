@@ -1,0 +1,4 @@
+?.?.?   + enhance   Adapted Windex to support easily configurable playbooks
+        + feature   Disallow new Microsoft Accounts (streamlining local user creation)
+        + feature   Suppress the welcome animation displayed upon new user sign in
+0.1.0   + init      First release

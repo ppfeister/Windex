@@ -1,6 +1,0 @@
-Windows Registry Editor Version 5.00
-
-; Disables the Meet Now taskbar icon and Meet Now functionality
-
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
-"HideSCAMeetNow"=dword:00000000
