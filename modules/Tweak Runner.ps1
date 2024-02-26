@@ -50,10 +50,10 @@ function UpdateAllUserHives {
         }
 
         if (!(Test-Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")")) {
-            New-Item -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Force | Out-Null
+            New-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Type $Type -Force | Out-Null
         }
         
-        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue | Out-Null
+        Set-ItemProperty -Path "registry::HKU\IdleUser\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue | Out-Null
         Invoke-Expression 'reg unload "HKU\IdleUser" 2>&1' | Out-Null
     }
     
@@ -63,9 +63,9 @@ function UpdateAllUserHives {
     
     foreach ($SID in $KnownSIDs) {
         if (!(Test-Path "registry::$SID\$($Key -replace "<USERS>")")) {
-            New-Item -Path "registry::$SID\$($Key -replace "<USERS>")" -Force | Out-Null
+            New-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Type $Type -Force | Out-Null
         }
-        Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Force -ErrorAction Continue | Out-Null
+        Set-ItemProperty -Path "registry::$SID\$($Key -replace "<USERS>")" -Name $Subkey -Value $Value -Type $Type -Force -ErrorAction Continue | Out-Null
     }
 }
 
@@ -81,7 +81,7 @@ $tweaksParsed | ForEach-Object {
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
                     if (!(Test-Path "registry::$($action.regset)")) {
-                        New-Item -Path "registry::$($action.regset)" -Force | Out-Null
+                        New-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Type $($action.value.Split(':')[0]) -Force | Out-Null
                     }
                     Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $($action.value.Split(':')[1]) -Type $($action.value.Split(':')[0]) -Force  | Out-Null
                 }
@@ -91,17 +91,3 @@ $tweaksParsed | ForEach-Object {
 }
 
 Remove-Module powershell-yaml -Verbose:$false
-
-<#
-
-foreach ($SID in $KnownSIDs) {
-    if ($Undo) {
-        Set-ItemProperty -Path "registry::$SID\Control Panel\Desktop\" -Name Wallpaper -Value "$env:SystemRoot\Web\Wallpaper\Windows\img0.jpg"
-        continue
-    }
-    Set-ItemProperty -Path "registry::$SID\Control Panel\Desktop\" -Name Wallpaper -Value "$StoredUri\$WallpaperToUse"
-}
-
-# global tweaks
-
-Set-ItemProperty -Path #>

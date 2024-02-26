@@ -192,6 +192,9 @@
       - AllowSearchToUseLocation
       - CortanaConsent
     value: dword:00000000
+  - regset: <USERS>\SOFTWARE\Policies\Microsoft\Windows\Explorer
+    subkey: DisableSearchBoxSuggestions
+    value: dword:00000001
 
 -
   name: "Disable automatic Game Bar enablement"
