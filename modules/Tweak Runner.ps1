@@ -77,7 +77,7 @@ $tweaksParsed | ForEach-Object {
                 } else {
                     #Invoke-Expression "REG ADD $($action.regset) /v $subkey /t $($action.value.Split(':')[0]) /d $($action.value.Split(':')[1]) /f > nul 2>&1"
                     # Set-ItemProperty currently has issues on systems where -Type doesn't exist yet
-                    Set-ItemProperty -Path $action.regset -Name $subkey -Value $action.value.Split(':')[1] -Force -ErrorAction Continue
+                    Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $action.value.Split(':')[1] -Force -ErrorAction Continue
                 }
             }
         }
