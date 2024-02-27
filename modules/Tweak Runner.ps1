@@ -39,8 +39,7 @@ function UpdateAllUserHives {
 
     $userProfiles = Get-ChildItem "$env:SystemDrive\Users" `
     | Where-Object { $_.PSIsContainer } `
-    | Where-Object { $_.Name -ne "Public" } `
-    | Where-Object { $_.Name -ne "Default" }
+    | Where-Object { $_.Name -ne "Public" }
 
     foreach ($profile in $userProfiles) {
         $ntuserPath = Join-Path $profile.FullName "NTUSER.DAT"
@@ -77,6 +76,8 @@ $tweaksParsed | ForEach-Object {
     Write-Verbose "$($tweak.Name)"
     $tweak.Actions | ForEach-Object {
         $action = $_
+
+        ## REGISTRY SETTERS
         if ($action.regset -ne $null) {
             $action.subkey | ForEach-Object {
                 $subkey = $_
@@ -92,6 +93,11 @@ $tweaksParsed | ForEach-Object {
                     Set-ItemProperty -Path "registry::$($action.regset)" -Name $subkey -Value $($action.value.Split(':')[1]) -Type $($action.value.Split(':')[0]) -Force  | Out-Null
                 }
             }
+        }
+
+        ElseIf ($action.pwsh -ne $null) {
+            # ARBITRARY POWERSHELL COMMANDS / SCRIPT BLOCKS
+            Invoke-Expression "{$($action.pwsh)}" | Out-Null
         }
     }
 }

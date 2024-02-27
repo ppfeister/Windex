@@ -1,3 +1,13 @@
+# Windex
+# https://github.com/ppfeister/windex
+#
+# MAINTAINER : Paul Pfeister ( https://github.com/ppfeister : https://pfeister.dev )
+#            :
+# PURPOSE    : Eliminate much of the crapware that comes with Windows 10 and Windows 11, and disable or otherwise
+#            : mitigate certain baked-in telemetry items, to the greatest extent possible without breaking Windows.
+#            :
+# LICENSE    : GNU General Public License v3.0 : https://github.com/ppfeister/windex/blob/master/LICENSE
+
 -
   name: "Disable Meet Now"
   actions:
@@ -225,3 +235,11 @@
   - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Feeds
     subkey: EnableFeeds
     value: dword:00000000
+
+-
+  name: Hide search bar on taskbar (reversable by user)
+  actions:
+  - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\Search
+    subkey: SearchBoxTaskbarMode
+    value: dword:00000000
+  - pwsh: Get-Process Explorer | Stop-Process
