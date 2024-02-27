@@ -16,7 +16,7 @@
     value: dword:00000001
 
 -
-  name: "Disable Microsoft Account support"
+  name: Disable Microsoft Account support (safe)
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
     subkey: NoConnectedUser
@@ -246,3 +246,14 @@
     subkey: SearchBoxTaskbarMode
     value: dword:00000000
   - pwsh: Get-Process Explorer | Stop-Process # Required to refresh the taskbar, otherwise setting may not take for some users.
+
+-
+  name: Prune system services
+  actions:
+  - svcset: disabled
+    service:
+      - BcastDVRUserService
+      - XblAuthManager
+      - XblGameSave
+      - XboxGipSvc
+      - XboxNetApiSvc

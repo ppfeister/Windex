@@ -45,3 +45,5 @@ The `actions` block can contain a list of however many actions of however many s
 Special here is the `<USERS>` keyword, as seen in the second tweak. When the `<USERS>` keyword is used in place of a hive, Windex will apply the tweak to the hive of all users loaded into HKEY_USERS (those that match SID `S-1-5-21-[...]`), and to the NTUSER.dat hives of each user found in `%SystemDrive%\Users` that is *not* currently loaded into HKEY_USERS. This can be useful in situations where you want users to be able to revert the tweak, or in situations where HKEY_LOCAL_MACHINE (etc) is ignored.
 
 **`pwsh`** can be used to run arbitrary powershell commands and script blocks. In the case of the second tweak, it's being used to restart the Explorer process, refreshing the now-changed taskbar for the user. Script blocks can be included here following standard yaml syntax (pipe-prefaced text).
+
+**`svcset`** action can be used to interact with system services. Currently only accepts value `disabled`. Requires element `service` to also be set, accepting raw service names. Can be one or many services.
