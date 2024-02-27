@@ -29,6 +29,19 @@
     value: dword:00000001
 
 -
+  name: Disable Microsoft Account support (nuclear)
+  category: Advanced
+  actions:
+  - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
+    subkey: NoConnectedUser
+    value: dword:00000003
+  - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
+    subkey: DisableUserAuth
+    value: dword:00000001
+  - svcset: disabled
+    service: wlidsvc
+
+-
   name: "Disable action center (a/k/a notification pane)"
   actions:
   - regset: HKCU\Software\Policies\Microsoft\Windows\Explorer
@@ -261,16 +274,3 @@
   category: Advanced
   actions:
   - pwsh: . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
-
--
-  name: Disable Microsoft Account support (nuclear)
-  category: Advanced
-  actions:
-  - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
-    subkey: NoConnectedUser
-    value: dword:00000003
-  - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
-    subkey: DisableUserAuth
-    value: dword:00000001
-  - svcset: disabled
-    service: wlidsvc
