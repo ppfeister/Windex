@@ -37,10 +37,10 @@ Get-ChildItem -Path "$WindexRootUri\modules\submodules\psyaml" -Recurse | Unbloc
 #Invoke-Command { & "powershell.exe" } -NoNewScope # sometimes the current session may need to be refreshed after unblocking
 Import-Module -Name "$WindexRootUri\modules\submodules\psyaml\powershell-yaml.psd1" -Verbose:$false
 
-$tweakPlaybook = Get-Content -Path "$WindexRootUri\defs\tweaks.yaml" -Raw 
+$tweakPlaybook = Get-Content -Path "$PlaybookUri" -Raw 
 $tweaksParsed = ConvertFrom-Yaml $tweakPlaybook
 
-Write-Verbose "Found $($tweaksParsed.Count) tweaks to apply in playbook"
+Write-Verbose "Found $($tweaksParsed.Count) tweaks to apply in playbook $([io.path]::GetFileNameWithoutExtension($PlaybookUri))"
 
 function UpdateAllUserHives {
     # HCKU/NTUSER.DAT TWEAKS APPLIED HERE
@@ -85,12 +85,12 @@ function UpdateAllUserHives {
     }
 }
 
-$skipped = 0
+$global:skipped = 0
 $tweaksParsed | ForEach-Object {
     $tweak = $_
 
     if (-not (($tweak.category -eq $null -and $ApplyPreferred -eq $true) -or ($Optionals -Contains $tweak.Name))) {
-        $Global:skipped++
+        $global:skipped++
         return
     }
 
@@ -119,7 +119,8 @@ $tweaksParsed | ForEach-Object {
 
         ElseIf ($action.pwsh -ne $null) {
             # ARBITRARY POWERSHELL COMMANDS / SCRIPT BLOCKS
-            Invoke-Expression "{$($action.pwsh)}" | Out-Null
+            $execblock = [scriptblock]::Create($action.pwsh)
+            . $execblock
         }
 
         ElseIf ($action.svcset -ne $null) {
@@ -141,6 +142,7 @@ $tweaksParsed | ForEach-Object {
     }
 }
 
-Write-Verbose "$skipped tweaks skipped."
+Write-Verbose "Skipped $skipped tweaks from playbook $([io.path]::GetFileNameWithoutExtension($PlaybookUri))"
+Remove-Variable -Name skipped -Scope global
 
 Remove-Module powershell-yaml -Verbose:$false

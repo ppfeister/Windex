@@ -12,7 +12,7 @@ Use Windex to clean Windows of as much bloat and telemetry as possible without i
 * AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
 * App Inst Debloat (to remove apps found on the [winget manifests](./defs/winget/))
 * Prune system services from autorun
-* Auto apply recommended tweaks (i.e. those found in [playbooks](./defs/tweaks.yaml))
+* Auto apply recommended tweaks (i.e. those found in [playbooks](./defs/general.yaml))
 * Allow advanced users to apply a selection of additional tweaks
 
 ## Basic use

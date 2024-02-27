@@ -34,7 +34,7 @@ $WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\..\.."
 
 Get-ChildItem -Path "$WindexRootUri\modules\submodules\psyaml" -Recurse | Unblock-File
 Import-Module -Name "$WindexRootUri\modules\submodules\psyaml\powershell-yaml.psd1" -Verbose:$false
-$tweakPlaybook = Get-Content -Path "$WindexRootUri\defs\tweaks.yaml" -Raw 
+$tweakPlaybook = Get-Content -Path "$PlaybookUri" -Raw 
 $tweaksParsed = ConvertFrom-Yaml $tweakPlaybook
 Remove-Module powershell-yaml -Verbose:$false
 

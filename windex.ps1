@@ -163,7 +163,7 @@ if ($options[$menuItem_SetVerbosity])   { $VerbosePreference = "Continue" }
 
 # Advanced Tweak Selection Screen
 if ($options[$menuItem_ShowAdvTweaks]) {
-    $selectedTweaks =. "$WindexRoot\modules\submodules\Tweak Select.ps1" -PlaybookUri "$WindexRoot\defs\tweaks.yaml" -Category "Advanced"
+    $selectedTweaks =. "$WindexRoot\modules\submodules\Tweak Select.ps1" -PlaybookUri "$WindexRoot\defs\general.yaml" -Category "Advanced"
 }
 
 # Modules
@@ -172,7 +172,7 @@ if ($options[$menuItem_MetroDebloat3P]) { . "$WindexRoot\modules\Debloat AppX.ps
 if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }
 if ($options[$menuItem_AutoApplyTweaks]){ . "$WindexRoot\modules\Legacy Tweaks.ps1" }
 
-. "$WindexRoot\modules\Playbook Handler.ps1" -PlaybookUri "$WindexRoot\defs\tweaks.yaml" -SelectedTweaks $selectedTweaks -ApplyPreferred $options[$menuItem_AutoApplyTweaks]
+. "$WindexRoot\modules\Playbook Handler.ps1" -PlaybookUri "$WindexRoot\defs\general.yaml" -Optionals $selectedTweaks -ApplyPreferred:$options[$menuItem_AutoApplyTweaks]
 
 Get-Process Explorer | Stop-Process # just for good measure
 
