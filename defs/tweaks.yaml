@@ -237,9 +237,12 @@
     value: dword:00000000
 
 -
-  name: Hide search bar on taskbar (reversable by user)
+  name: Cleanup taskbar (reversable by user)
   actions:
+  - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    subkey: ShowTaskViewButton
+    value: dword:00000000
   - regset: <USERS>\Software\Microsoft\Windows\CurrentVersion\Search
     subkey: SearchBoxTaskbarMode
     value: dword:00000000
-  - pwsh: Get-Process Explorer | Stop-Process
+  - pwsh: Get-Process Explorer | Stop-Process # Required to refresh the taskbar, otherwise setting may not take for some users.
