@@ -95,7 +95,6 @@ $globalStartMenuPaths = @(
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessories',
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Accessibility',
-    'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup',
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Maintenance',
     'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Settings',
@@ -108,7 +107,6 @@ $typicalUserStartMenuPaths = @(
     'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup',
     'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessories',
     'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Accessibility',
-    'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell',
     'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Administrative Tools',
     'C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools'
 )
