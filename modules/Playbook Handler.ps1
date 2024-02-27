@@ -11,11 +11,25 @@
 <#
 .SYNOPSIS
 Parse yaml tweak manifests and apply them to the system.
+.PARAMETER PlaybookUri
+The relative or absolute path to the YAML playbook.
+.PARAMETER ApplyPreferred
+Defaults to false. Automatically applies Windex-preferred tweaks.
+.PARAMETER Optionals
+List of manually selected tweaks to apply, whether or not they are Windex-preferred.
 .LINK
 Official repository: https://github.com/ppfeister/Windex
 .LINK
 Latest release: https://github.com/ppfeister/Windex/releases/latest
 #>
+
+#Requires -RunAsAdministrator
+
+param (
+    [Parameter(Position = 0, Mandatory = $true)] [string] $PlaybookUri,
+    [Parameter(Position = 1, Mandatory = $false)] [switch] $ApplyPreferred = $false,
+    [Parameter(Position = 2, Mandatory = $false)] $Optionals = $null
+)
 
 $WindexRootUri = "$(Split-Path $MyInvocation.MyCommand.Path -Parent)\.."
 
@@ -71,8 +85,16 @@ function UpdateAllUserHives {
     }
 }
 
+$skipped = 0
 $tweaksParsed | ForEach-Object {
     $tweak = $_
+
+    if (-not (($tweak.category -eq $null -and $ApplyPreferred -eq $true) -or ($Optionals -Contains $tweak.Name))) {
+        $Global:skipped++
+        return
+    }
+
+
     Write-Verbose "$($tweak.Name)"
     $tweak.Actions | ForEach-Object {
         $action = $_
@@ -82,7 +104,7 @@ $tweaksParsed | ForEach-Object {
             $action.subkey | ForEach-Object {
                 $subkey = $_
                 if ($action.regset.StartsWith("<USERS>")) {
-                    # HKCU/NTUSER.DAT TWEAKS APPLIED IN F(X) UpdateAllUserHives
+                    # HKU/NTUSER.DAT TWEAKS APPLIED IN F(X) UpdateAllUserHives
                     UpdateAllUserHives -Key $action.regset -Subkey $subkey -Value $action.value.Split(':')[1] -Type $action.value.Split(':')[0]
                 } else {
                     # HKLM TWEAKS APPLIED HERE
@@ -99,7 +121,26 @@ $tweaksParsed | ForEach-Object {
             # ARBITRARY POWERSHELL COMMANDS / SCRIPT BLOCKS
             Invoke-Expression "{$($action.pwsh)}" | Out-Null
         }
+
+        ElseIf ($action.svcset -ne $null) {
+            # SET-SERVICE ACTIONS
+            if ($action.svcset -eq "disabled") {
+                $action.service | ForEach-Object {
+                    $service = $_
+                    if (Get-Service -Name $service -ErrorAction SilentlyContinue) {
+                        try {
+                            Stop-Service -Name $service -Force -ErrorAction SilentlyContinue
+                            Set-Service -Name $service -StartupType Disabled -ErrorAction SilentlyContinue
+                        } catch {
+                            Write-Error "Failed to stop or disable system service $service."
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
+Write-Verbose "$skipped tweaks skipped."
 
 Remove-Module powershell-yaml -Verbose:$false

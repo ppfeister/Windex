@@ -180,7 +180,7 @@
     value: dword:00000002
 
 -
-  name: "Prune Cortana / Windows Search"
+  name: Prune Cortana / Windows Search
   actions:
   - regset: HKLM\Software\Policies\Microsoft\Windows\Windows Search
     subkey:
@@ -207,7 +207,7 @@
     value: dword:00000001
 
 -
-  name: "Disable automatic Game Bar enablement"
+  name: Disable automatic Game Bar enablement
   actions:
   - regset: HKLM\Software\Microsoft\GameBar
     subkey:
@@ -216,11 +216,9 @@
     value: dword:00000000
 
 -
-  name: "Disable Windows Defender Firewall (permanently)"
+  name: Disable Windows Defender Firewall (permanently)
+  category: Advanced
   actions:
-  confirm: Do you want to permanently disable the Windows Defender Firewall?
-  confirm_detail: This will prevent all users from enabling it in the future, including Administrators, unless they update the registry.
-  optionals:
   - regset: HKLM\Software\Policies\Microsoft\WindowsFirewall\StandardProfile
     subkey: EnableFirewall
     value: dword:00000000
@@ -257,3 +255,22 @@
       - XblGameSave
       - XboxGipSvc
       - XboxNetApiSvc
+
+-
+  name: Remove Microsoft Edge (experimental)
+  category: Advanced
+  actions:
+  - pwsh: . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
+
+-
+  name: Disable Microsoft Account support (nuclear)
+  category: Advanced
+  actions:
+  - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
+    subkey: NoConnectedUser
+    value: dword:00000003
+  - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
+    subkey: DisableUserAuth
+    value: dword:00000001
+  - svcset: disabled
+    service: wlidsvc
