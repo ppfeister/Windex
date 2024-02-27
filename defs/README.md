@@ -47,3 +47,7 @@ Special here is the `<USERS>` keyword, as seen in the second tweak. When the `<U
 **`pwsh`** can be used to run arbitrary powershell commands and script blocks. In the case of the second tweak, it's being used to restart the Explorer process, refreshing the now-changed taskbar for the user. Script blocks can be included here following standard yaml syntax (pipe-prefaced text).
 
 **`svcset`** action can be used to interact with system services. Currently only accepts value `disabled`. Requires element `service` to also be set, accepting raw service names. Can be one or many services.
+
+### Additional Attributes
+
+Tweaks with the **`category`** attribute will be excluded from the auto-apply module. `Advanced` is only currently implemented category.
