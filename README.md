@@ -26,6 +26,8 @@ Set-ExecutionPolicy Bypass -Scope Process # Confirm with Y or A
 . ./windex.ps1 # User will be presented with an interactive menu
 ```
 
+If you experience some sort of error or hangup, just restart and try again. We're working on optimization and parallelization so it's probably related to that. Reports are encouraged.
+
 ## Detailed documentation
 
 - [Manifests and Playbooks](defs/README.md) documentation
@@ -35,5 +37,6 @@ Set-ExecutionPolicy Bypass -Scope Process # Confirm with Y or A
 
 - [x] Adopt playbooks for easier expansion and maintenance
 - [ ] Remove additional telemetry **(in progress)**
+- [ ] Escalate to SYSTEM or TI without triggering UAC and without psexec to disable certain protected services
 - [ ] Create some sort of deployment pipeline for easier fetch and exec (possibly to one of the Windows package managers)
 - [ ] Add normally-hidden tweak for the installation of hypervisor guest agents
