@@ -81,5 +81,6 @@ Microsoft.Xbox.TCUI
 Microsoft.XboxSpeechToTextOverlay
 Microsoft.XboxIdentityProvider
 MicrosoftCorporationII.QuickAssist
-Microsoft.ZuneVideo
+:::: Windows Media Player?
+::Microsoft.ZuneVideo
 Windows.ContactSupport
