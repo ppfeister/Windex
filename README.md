@@ -4,18 +4,18 @@
 
 Use Windex to clean Windows of as much bloat and telemetry as possible without impeding normal function. Windex was built with virtualization in mind, but we're starting to use it on workstations as well.
 
-> [!IMPORTANT]
-> While Windex was designed with stability and usability in mind, caution should still be exercised outside of virtual environments. It's recommended that you read through the manifests and playbooks to understand what changes are being made.
+Windex currently has varying degrees of support for debloating AppX packages, debloating AppInst packages, pruning system services, disabling various telemetry items, and more via advanced tweaks.
 
-## Available Actions
+The debloat manifests are easily updated, allowing users to add or remove packages at will, and with recently added support for playbooks, users can add more advanced tweaks in just a few lines.
 
-* AppX Debloat (to remove apps found on the [metro manifests](./defs/metro/))
-* App Inst Debloat (to remove apps found on the [winget manifests](./defs/winget/))
-* Prune system services from autorun
-* Auto apply recommended tweaks (i.e. those found in [playbooks](./defs/general.yaml))
-* Allow advanced users to apply a selection of additional tweaks
+The general consensus is that endpoints running Windex feel snapier and are much less intrusive.
+
+![Windex Desktop](./assets/demo/start.png)
 
 ## Basic use
+
+> [!WARNING]
+> While Windex was designed with stability and usability in mind, not everyone's environments and workflows are the same. Taking a snapshot or backup before running is considered best practice.
 
 Must be ran in an **elevated** PowerShell instance. **Reboot when complete.**
 
