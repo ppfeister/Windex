@@ -27,10 +27,12 @@
   - regset: HKLM\Software\Policies\Microsoft\MicrosoftAccount
     subkey: DisableUserAuth
     value: dword:00000001
+  #- svcset: disabled       # TODO: Enable wildcard support for service names
+  #  service: OneSyncSvc*
 
 -
   name: Disable Microsoft Account support (nuclear)
-  category: Advanced
+  category: advanced
   actions:
   - regset: HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
     subkey: NoConnectedUser
@@ -40,6 +42,8 @@
     value: dword:00000001
   - svcset: disabled
     service: wlidsvc
+  #- svcset: disabled       # TODO: Enable wildcard support for service names
+  #  service: OneSyncSvc*
 
 -
   name: "Disable action center (a/k/a notification pane)"
@@ -229,8 +233,8 @@
     value: dword:00000000
 
 -
-  name: Disable Windows Defender Firewall (permanently)
-  category: Advanced
+  name: Disable Windows Defender Firewall
+  category: advanced
   actions:
   - regset: HKLM\Software\Policies\Microsoft\WindowsFirewall\StandardProfile
     subkey: EnableFirewall
@@ -264,6 +268,17 @@
   - svcset: disabled
     service:
       - BcastDVRUserService
+      - CertPropSvc # smart card handling
+      - DiagTrack # major telemetry item
+      - Fax
+      - icssvc # mobile hotspot svc
+      - iphlpsvc # IP Helper (relates to IPv6 tunneling -- can be removed if issues arise with IPv6 connectivity)
+      - LanmanWorkstation # SMB client
+      - lfsvc # location service
+      - MapsBroker # offline maps
+      - NcbService # network con broker for windows store app notifications
+      - sysmain # performance monitoring and claimed "improvement over time"
+      #- TokenBroker # may be required on w11, needs validation before including
       - XblAuthManager
       - XblGameSave
       - XboxGipSvc
@@ -271,6 +286,54 @@
 
 -
   name: Remove Microsoft Edge (experimental)
-  category: Advanced
+  category: advanced
   actions:
   - pwsh: . "$WindexRoot\tweaks\optional\Remove Edge.ps1" -UninstallAll -Exit -Verbose:$false
+
+-
+  name: Disable Watchdogs (i.e. UAC misconfiguration notifications)
+  category: disabled # This needs to be handled differently than most services as it's owned by TrustedInstaller.
+  actions:
+  - svcset: disabled
+    service: wscsvc
+    # This may disable automatic update checking as well. Need to confirm.
+
+-
+  name: Disable Windows update nagging (experimental)
+  category: advanced
+  actions:
+  - svcset: disabled
+    service: wuauserv # Windows Update
+
+-
+  name: Disable Windows update services entirely
+  category: advanced
+  actions:
+  - svcset: disabled
+    service:
+      - wuauserv # Windows Update
+      - UsoSvc # Update Orchestrator Service
+
+-
+  name: Disable touch input services
+  category: advanced
+  actions:
+  - svcset: disabled
+    service: TabletInputService
+
+-
+  name: Disable biometric services
+  category: advanced
+  actions:
+  - svcset: disabled
+    service: WbioSrvc
+
+-
+  name: Disable push notification services
+  category: advanced
+  actions:
+  - svcset: disabled
+    service:
+      - WpnService
+      - WpnUserService
+      - WpnUserService_*

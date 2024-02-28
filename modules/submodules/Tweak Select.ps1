@@ -64,9 +64,7 @@ $form.Controls.Add($RunButton)
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,20)
 $label.Size = New-Object System.Drawing.Size(350,40)
-# (,$tweaksParsed) is used instead of simply $tweaksParsed to force treatment as a multidimensional array even when size == 1.
-# Otherwise, when size == 1, .Count will count the number of elements in the first tweak instead of the number of tweaks.
-$label.Text = "$((,$tweaksParsed).Count) tweaks found in playbook $([io.path]::GetFileNameWithoutExtension($PlaybookUri)) matching category $Category.`nSelect multiple by holding Ctrl."
+$label.Text = "$($tweaksParsed.Count) tweaks found in playbook $([io.path]::GetFileNameWithoutExtension($PlaybookUri)) matching category $Category.`nSelect multiple by holding Ctrl."
 $form.Controls.Add($label)
 
 $listBox = New-Object System.Windows.Forms.Listbox
