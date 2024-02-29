@@ -1,3 +1,4 @@
+?.?.?   + feature   Hypervisor detection and guest tool installation
 0.1.1   + enhance   Adapted Windex to support easily configurable playbooks
         + enhance   Expanded upon existing manifests
         + enhance   Expanded upon existing Explorer cleanup tweaks

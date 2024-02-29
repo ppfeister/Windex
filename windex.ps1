@@ -37,6 +37,8 @@ New-Variable -Scope Script -Name scriptBanner -Option Constant -Value @"
 
 "@
 
+. "$WindexRoot\modules\Guest Tools.ps1"
+
     ###################
   #######################
 ###########################
@@ -57,6 +59,12 @@ $options = @{
     $menuItem_AutoApplyTweaks = $true
     $menuItem_WingetDebloat = $true
     $menuItem_ShowAdvTweaks = $false
+}
+
+$hv_type = WhichVirtualEnvironment
+if ($null -ne $hv_type) {
+    $menuItem_GuestTools = "Module : Install $hv_type guest tools"
+    $options[$menuItem_GuestTools] = $true
 }
 
 function DisplayMenu {
@@ -167,6 +175,7 @@ if ($options[$menuItem_ShowAdvTweaks]) {
 }
 
 # Modules
+if ($options[$menuItem_GuestTools])     { InstallAgent -hv_type $hv_type }
 if ($options[$menuItem_MetroDebloatMS]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\microsoft" }
 if ($options[$menuItem_MetroDebloat3P]) { . "$WindexRoot\modules\Debloat AppX.ps1" -ManifestDirectory "$WindexRoot\defs" -ManifestCategory "metro\thirdparty" }
 if ($options[$menuItem_WingetDebloat])  { . "$WindexRoot\modules\Debloat AppInst.ps1" -ManifestDirectory "$WindexRoot\defs\winget" -ManifestCategory "generalized-by-name" }

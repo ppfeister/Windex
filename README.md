@@ -4,7 +4,7 @@
 
 Use Windex to clean Windows of as much bloat and telemetry as possible without impeding normal function. Windex was built with virtualization in mind, but we're starting to use it on workstations as well.
 
-Windex currently has varying degrees of support for debloating AppX packages, debloating AppInst packages, pruning system services, disabling various telemetry items, and more via advanced tweaks.
+Windex currently has varying degrees of support for debloating AppX packages, debloating AppInst packages, pruning system services, disabling various telemetry items, and more via advanced tweaks. Windex will attempt to detect virtual environments as well, offering to install the detected hypervisor's guest tools when available (i.e. QEMU Guest Agent).
 
 The debloat manifests are easily updated, allowing users to add or remove packages at will, and with recently added support for playbooks, users can add more advanced tweaks in just a few lines.
 
@@ -39,4 +39,4 @@ If you experience some sort of error or hangup, just restart and try again. We'r
 - [ ] Remove additional telemetry **(in progress)**
 - [ ] Escalate to SYSTEM or TI without triggering UAC and without psexec to disable certain protected services
 - [ ] Create some sort of deployment pipeline for easier fetch and exec (possibly to one of the Windows package managers)
-- [ ] Add normally-hidden tweak for the installation of hypervisor guest agents
+- [x] Add normally-hidden tweak for the installation of hypervisor guest agents **(KVM/QEMU support added!)**
