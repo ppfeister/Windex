@@ -34,7 +34,7 @@ The parser is being adapted to support more and more functions as time goes on. 
 
 Note that each segment is preceeded by a lone `-`.
 
-The `name` element is required and will sometimes be printed to the user.
+The `name` element is required and will sometimes be printed to the user. The name attribute must be unique.
 
 The `actions` block can contain a list of however many actions of however many supported types you wish. (note how the second tweak has one `regset` and one `pwsh`)
 
