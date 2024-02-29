@@ -61,7 +61,11 @@ $options = @{
     $menuItem_ShowAdvTweaks = $false
 }
 
-$hv_type = WhichVirtualEnvironment
+function hasInternet {
+    return (Test-Connection -ComputerName 1.1.1.1 -Count 1 -Quiet)
+}
+
+$hv_type = if ( hasInternet ) { WhichVirtualEnvironment } else { $null }
 if ($null -ne $hv_type) {
     $menuItem_GuestTools = "Module : Install $hv_type guest tools"
     $options[$menuItem_GuestTools] = $true
